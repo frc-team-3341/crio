@@ -6,7 +6,9 @@
 /*----------------------------------------------------------------------------*/
 package org.wvrobotics;
 
-import edu.wpi.first.wpilibj.DriverStationLCD;
+import com.sun.squawk.io.BufferedReader;
+import java.io.IOException;
+import javax.microedition.io.Connector;
 import org.wvrobotics.control.ButtonEvent;
 import org.wvrobotics.control.ButtonListener;
 import org.wvrobotics.control.Controller;
@@ -14,9 +16,14 @@ import org.wvrobotics.control.ControllerManager;
 import org.wvrobotics.control.JoystickEvent;
 import org.wvrobotics.control.JoystickListener;
 import org.wvrobotics.util.Robot;
-
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,12 +33,33 @@ import edu.wpi.first.wpilibj.RobotDrive;
  * directory.
  */
 public class Main extends IterativeRobot implements JoystickListener,
-        ButtonListener {
+        ButtonListener{
+
+    private static class Logger extends Thread implements Runnable{
+
+        private PrintStream rpiStream;
+        private Shooter shooter;
+        public Logger(PrintStream stream, Shooter shooter) {
+            rpiStream = stream;
+            this.shooter = shooter;
+        }
+
+        public void run() {
+            while(true){
+                rpiStream.println(System.currentTimeMillis() + "," + shooter.getPWM() + "," + shooter.getRPM());
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+                }
+            }
+        }
+    }
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    private Relay relay;
     private Controller c;
     private Controller c2;
     private BridgeManipulator bm;
@@ -45,8 +73,13 @@ public class Main extends IterativeRobot implements JoystickListener,
     private boolean autoFinished = false;
     private DriverStationLCD dLCD;
     private int control = 0;
+    private DataOutputStream rpiLogger;
+    private DataInputStream rpiTargeting;
+    private BufferedReader reader;
+    public PrintStream rpiStream;
+    private Logger logger;
 //	private Counter encoder;
-
+//push the any key to hack
     public void robotInit() {
         c = ControllerManager.getInstance().getController(1, 16);
         c.addButtonListener(this);
@@ -59,13 +92,14 @@ public class Main extends IterativeRobot implements JoystickListener,
         ballAcquirer = new BallAcquirer(4, 5);
         driveTrain = new RobotDrive(1, 2);
         dLCD = DriverStationLCD.getInstance();
+        relay = new Relay(1);
+        relay.set(Relay.Value.kOff);
         getWatchdog().setEnabled(false);
         shooterPWM = 0;
         speed = 0;
         curve = 0;
-
         reversed = 1;
-
+        
         //encoder = new Counter(1);
         //encoder.start();
     }
@@ -82,7 +116,6 @@ public class Main extends IterativeRobot implements JoystickListener,
         if (autoFinished) {
             return;
         }
-
         shooter.set(1);
         Robot.pause(3000);
         //while (encoder.getPeriod() < 0.04);
@@ -94,7 +127,6 @@ public class Main extends IterativeRobot implements JoystickListener,
         Robot.pause(2400);
         //System.out.println(encoder.getPeriod());
         shooter.shoot();
-
         autoFinished = true;
     }
 
@@ -102,9 +134,36 @@ public class Main extends IterativeRobot implements JoystickListener,
         speed = 0;
         curve = 0;
         reversed = 1;
-
         ballAcquirer.setReversed(false);
         ballAcquirer.setEnabled(false);
+        try {
+            rpiLogger = Connector.openDataOutputStream("socket://10.33.41.42:80");
+            rpiTargeting = Connector.openDataInputStream("socket://10.33.41.42:3341");
+            reader = new BufferedReader(new InputStreamReader(rpiTargeting));
+            rpiStream = new PrintStream(rpiLogger);
+            logger = new Logger(rpiStream, shooter);
+            logger.start();
+//            final int RPM = 2500;
+//            while(true){
+//                if(shooter.getRPM() >= RPM + 50){
+//                    shooter.set(0.3);
+//                    rpiStream.println(",,,Shooting");
+//                    shooter.shoot();
+//                }
+//                else if(shooter.getRPM() <= RPM - 50)
+//                    shooter.set(0.9);
+//            }
+            /*for(double i = 0.3; i <= 1.05; i += 0.3){
+                shooter.set(i);
+                Thread.sleep(20000);
+            }
+            for(double i = 0.9; i >= 0.3; i -= 0.3){
+                shooter.set(i);
+                Thread.sleep(20000);
+            }
+            shooter.set(0);*/
+        } catch (Exception ex) {
+        }
     }
 
     /**
@@ -127,6 +186,8 @@ public class Main extends IterativeRobot implements JoystickListener,
             dLCD.updateLCD();
             control = 0;
         }
+
+
     }
 
     public void buttonPressed(ButtonEvent e) {
@@ -148,6 +209,11 @@ public class Main extends IterativeRobot implements JoystickListener,
         } else if (e.getSource().equals(c2)) {
             switch (e.getButton()) {
                 case 1:
+            try {
+                dLCD.println(DriverStationLCD.Line.kUser3, 1, "Targeting: " + reader.readLine());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
                     shooter.shoot();
                     break;
                 case 2:
@@ -166,7 +232,14 @@ public class Main extends IterativeRobot implements JoystickListener,
                 case 12:
                 case 13:
                     shooterPWM = (e.getButton() - 3) * .1;
+
                     shooter.set(shooterPWM);
+                    break;
+                case 14:
+                    relay.set(Relay.Value.kOn);
+                    break;
+                case 15:
+                    relay.set(Relay.Value.kOff);
                     break;
             }
         }

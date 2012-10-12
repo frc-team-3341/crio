@@ -21,11 +21,13 @@ public class Shooter {
 		ballLoaderController.set(0);
 		encoder = new Counter(1, 2);
 		encoder.start();
-		
 		enabled = false;
-		
 		lastValue = 0;
 	}
+
+        public double getPWM(){
+            return shooterController.get();
+        }
 	
 	public void toggle() {
 		//enabled = !enabled;
