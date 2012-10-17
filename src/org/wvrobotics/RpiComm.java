@@ -6,6 +6,9 @@
 /*----------------------------------------------------------------------------*/
 package org.wvrobotics;
 
+import com.sun.squawk.io.BufferedReader;
+import java.io.IOException;
+import javax.microedition.io.Connector;
 import org.wvrobotics.control.ButtonEvent;
 import org.wvrobotics.control.ButtonListener;
 import org.wvrobotics.control.Controller;
@@ -17,6 +20,9 @@ import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 /**
@@ -28,6 +34,41 @@ import java.io.PrintStream;
  */
 public class Main extends IterativeRobot implements JoystickListener,
         ButtonListener{
+
+    private static class RpiComm extends Thread implements Runnable{
+
+        private PrintStream rpiStream;
+	private BufferedReader reader;
+        private Shooter shooter;
+	private String buffer;
+        public Logger(PrintStream stream, BufferedReader reader, Shooter shooter) {
+            rpiLogger = Connector.openDataOutputStream("socket://10.33.41.42:80");
+            rpiTargeting = Connector.openDataInputStream("socket://10.33.41.42:3341");
+            reader = new BufferedReader(new InputStreamReader(rpiTargeting));
+            rpiStream = new PrintStream(rpiLogger);
+	    rpiStream = stream;
+	    this.reader = reader;
+            this.shooter = shooter;
+	    buffer = "";
+        }
+
+        public void run() {
+            while(true){
+                rpiStream.println(System.currentTimeMillis() + "," + shooter.getPWM() + "," + shooter.getRPM());
+		rpiStream.println("\n");
+		buffer = reader.readLine();
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+                }
+            }
+        }
+
+	public String getBuffer(){
+	    return buffer;
+	}
+    }
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -46,7 +87,11 @@ public class Main extends IterativeRobot implements JoystickListener,
     private boolean autoFinished = false;
     private DriverStationLCD dLCD;
     private int control = 0;
-    private RPIComm rpiComm;
+    private DataOutputStream rpiLogger;
+    private DataInputStream rpiTargeting;
+    private BufferedReader reader;
+    public PrintStream rpiStream;
+    private RpiComm rpiComm;
 //	private Counter encoder;
 //push the any key to hack
     public void robotInit() {
@@ -62,7 +107,7 @@ public class Main extends IterativeRobot implements JoystickListener,
         driveTrain = new RobotDrive(1, 2);
         dLCD = DriverStationLCD.getInstance();
         relay = new Relay(1);
-        relay.set(Relay.Value.kOn);
+        relay.set(Relay.Value.kOff);
         getWatchdog().setEnabled(false);
         shooterPWM = 0;
         speed = 0;
@@ -90,7 +135,7 @@ public class Main extends IterativeRobot implements JoystickListener,
         //while (encoder.getPeriod() < 0.04);
         shooter.shoot();
         shooter.set(-.1);
-        ballAcquirer.setEnabled(true);
+        ballAcquirer.setEtnabled(true);
         Robot.pause(4500);
         shooter.set(1);
         Robot.pause(2400);
@@ -105,8 +150,9 @@ public class Main extends IterativeRobot implements JoystickListener,
         reversed = 1;
         ballAcquirer.setReversed(false);
         ballAcquirer.setEnabled(false);
-        //rpiComm = new RPIComm(shooter);
         try {
+                      logger = new Logger(rpiStream, shooter);
+            logger.start();
 //            final int RPM = 2500;
 //            while(true){
 //                if(shooter.getRPM() >= RPM + 50){
@@ -173,6 +219,11 @@ public class Main extends IterativeRobot implements JoystickListener,
         } else if (e.getSource().equals(c2)) {
             switch (e.getButton()) {
                 case 1:
+            try {
+                dLCD.println(DriverStationLCD.Line.kUser3, 1, "Targeting: " + reader.readLine());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
                     shooter.shoot();
                     break;
                 case 2:
@@ -193,6 +244,12 @@ public class Main extends IterativeRobot implements JoystickListener,
                     shooterPWM = (e.getButton() - 3) * .1;
 
                     shooter.set(shooterPWM);
+                    break;
+                case 14:
+                    relay.set(Relay.Value.kOn);
+                    break;
+                case 15:
+                    relay.set(Relay.Value.kOff);
                     break;
             }
         }
