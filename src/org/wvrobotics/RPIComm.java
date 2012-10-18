@@ -73,6 +73,7 @@ public class RPIComm {
             while (true) {
                 try {
                     output.println("\n");
+		    Thread.sleep(100);
                     String currentValue = input.readLine();
                     System.out.println(currentValue);
                     /*if (currentValue.equals("No rectangle"))
