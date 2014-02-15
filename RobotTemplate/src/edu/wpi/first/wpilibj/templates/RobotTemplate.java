@@ -29,17 +29,20 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    private Controller c;
+    private Controller controller;
     private RobotDrive drive;
     private Shooter shooter;
-    private final int DRIVE_PORT_LEFT = 1;
-    private final int DRIVE_PORT_RIGHT = 2;
+    //wheels
+    private final int top_left = 1;
+    private final int bottom_left = 2;
+    private final int top_right = 3;    
+    private final int bottom_right = 4;
     
     public void robotInit() {
-        c = ControllerManager.getInstance().getController(1, 16);
-        c.addButtonListener(this);
-        c.addJoystickListener(this);
-        drive = new RobotDrive(DRIVE_PORT_LEFT, DRIVE_PORT_RIGHT); //1 and 2 are PWM port numbers
+        controller = ControllerManager.getInstance().getController(1, 16);
+        controller.addButtonListener(this);
+        controller.addJoystickListener(this);
+        drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right); //1 and 2 are PWM port numbers
         shooter = new Shooter();
     }
 
@@ -54,14 +57,13 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        drive.arcadeDrive(c.getY(),c.getZ());
+        drive.mecanumDrive_Polar(controller.getX(), controller.getY(), controller.getZ());
     }
     
     /**
      * This function is called periodically during test mode
      */
-    public void testPeriodic() {
-    
+    public void testPeriodic() {    
     }
 
     public void joystickMoved(JoystickEvent e) {
@@ -72,7 +74,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 
     public void buttonPressed(ButtonEvent e) {
         if(e.getButton() == 1)
-            shooter.shoot(500);
+            shooter.shoot();
         
     }
 
