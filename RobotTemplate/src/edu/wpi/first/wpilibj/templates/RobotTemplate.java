@@ -34,6 +34,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private Shooter shooter;
     private final int DRIVE_PORT_LEFT = 1;
     private final int DRIVE_PORT_RIGHT = 2;
+    
     public void robotInit() {
         c = ControllerManager.getInstance().getController(1, 16);
         c.addButtonListener(this);
@@ -71,20 +72,12 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 
     public void buttonPressed(ButtonEvent e) {
         if(e.getButton() == 1)
-            shooter.shoot();
-        else if(e.getButton() == 2)
-            shooter.load();
-        else if(e.getButton() == 3)
-            shooter.shootClose();
-        else if(e.getButton() == 4)
-            shooter.shootMedium();
-        else if(e.getButton() == 5)
-            shooter.shootFar();
+            shooter.shoot(500);
         
     }
 
     public void buttonReleased(ButtonEvent e) {
-        if(e.getButton() == 2)
+        if(e.getButton() == 1)
             shooter.stop();
     }
 

@@ -25,20 +25,17 @@ public class Shooter {
     }
     
     public void shoot(){
-        launcher.setPosition(90); //releases the shooter
-        launcher.setPosition(0);
+        
     }
     
-    private void shoot(int millis){
-        loader.set(1.0);
+    public void shoot(int millis){
+        launcher.set(1.0);
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ex) {
         }
-        loader.set(0);
-        shoot();
-    }
-    
+        launcher.set(0);
+    }    
     
     public void shootClose(){
         shoot(500);
@@ -56,8 +53,6 @@ public class Shooter {
     }
     
     public void stop(){
-        loader.set(0);
-    }
-    
-    
+        launcher.set(0);
+    }    
 }
