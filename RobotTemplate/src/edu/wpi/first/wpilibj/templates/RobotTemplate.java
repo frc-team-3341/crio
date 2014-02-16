@@ -48,7 +48,8 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private final int SHOOTER_MOTOR_2 = 6;
     //ElToro Motors
     private final int VAN_DOOR = 7;
-    private final int ACQUIRER = 8;
+    private final int ACQUIRER1 = 8;
+    private final int ACQUIRER2 = 9;
     
     public void robotInit() {
         controller = ControllerManager.getInstance().getController(1, 16);
@@ -56,7 +57,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         controller.addJoystickListener(this);
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
-        eltoro = new ElToro(VAN_DOOR, ACQUIRER);
+        eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
     }
 
     public void autonomousPeriodic() {
