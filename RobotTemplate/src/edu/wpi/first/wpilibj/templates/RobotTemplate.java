@@ -83,13 +83,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                 shooter.shoot();
                 break;
             case '2':
-                //todo: add stuff
+                eltoro.collect();
                 break;
             case '3':
                 eltoro.pitch_down();
                 break;
             case '4':
                 eltoro.pitch_up();
+                break;
+            case '5':
+                eltoro.dump();
                 break;
         }
         
@@ -101,13 +104,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                 shooter.stop();
                 break;
             case '2':
-                //todo: add stuff
+                eltoro.acquirer_stop();
                 break;
             case '3':
                 eltoro.pitch_stop();
                 break;
             case '4':
                 eltoro.pitch_stop();
+                break;
+            case '5':
+                eltoro.acquirer_stop();
                 break;
         }
     }
