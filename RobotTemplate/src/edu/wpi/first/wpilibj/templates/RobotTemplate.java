@@ -49,7 +49,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         controller = ControllerManager.getInstance().getController(1, 16);
         controller.addButtonListener(this);
         controller.addJoystickListener(this);
-        drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right); //1 and 2 are PWM port numbers
+        drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
         eltoro = new ElToro(VAN_DOOR, ACQUIRER);
     }
