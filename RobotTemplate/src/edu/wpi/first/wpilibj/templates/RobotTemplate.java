@@ -85,8 +85,11 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonReleased(ButtonEvent e) {
-        if(e.getButton() == 1)
-            shooter.stop();
+        switch(e.getButton()){
+            case '1':
+                shooter.stop();
+                break;
+        }
     }
 
     public void buttonTyped(ButtonEvent e) {
