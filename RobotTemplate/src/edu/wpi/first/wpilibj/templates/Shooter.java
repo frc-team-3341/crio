@@ -11,7 +11,7 @@ import org.wvrobotics.util.Robot;
 
 /**
  *
- * @author michael
+ * @author George "Agent 10" Troulis
  */
 public class Shooter {
     private final int SHOOTER_PORT = 5;
