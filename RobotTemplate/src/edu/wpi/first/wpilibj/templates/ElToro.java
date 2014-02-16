@@ -11,7 +11,7 @@ import org.wvrobotics.util.Robot;
 
 /**
  *
- * @author Spaceguy44
+ * @author Spaceguy44 (Adam)
  */
 public class ElToro {
     
