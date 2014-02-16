@@ -5,6 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/*
+ * Code developed by:
+ *  George Troulis
+ *  Adam <something>
+ *  Colby Hester
+ *  Brenda <something>
+ *
+ *  Code available on Github
+*/
 package edu.wpi.first.wpilibj.templates;
 
 
