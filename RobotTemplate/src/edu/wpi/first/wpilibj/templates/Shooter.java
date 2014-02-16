@@ -14,18 +14,24 @@ import org.wvrobotics.util.Robot;
  * @author George "Agent 10" Troulis
  */
 public class Shooter {
-    private final int SHOOTER_PORT = 5;
-    private Jaguar launcher;
+    private final int SHOOTER_MOTOR_1 = 5;
+    private final int SHOOTER_MOTOR_2 = 6;
+    
+    private Jaguar motor_1;
+    private Jaguar motor_2;
     
     public Shooter(){
-        launcher = new Jaguar(SHOOTER_PORT);
+        motor_1 = new Jaguar(SHOOTER_MOTOR_1);
+        motor_2 = new Jaguar(SHOOTER_MOTOR_1);
     }
     
     public void shoot(){
-        launcher.set(1.0);        
+        motor_1.set(1.0);
+        motor_2.set(1.0);
     }
     
     public void stop(){
-        launcher.set(0);
+        motor_1.set(0);
+        motor_2.set(0);
     }    
 }
