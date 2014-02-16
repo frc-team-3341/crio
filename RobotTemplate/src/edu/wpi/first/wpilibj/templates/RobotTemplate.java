@@ -73,8 +73,14 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonPressed(ButtonEvent e) {
-        if(e.getButton() == 1)
-            shooter.shoot();
+        switch(e.getButton()) {
+            case '1':
+                shooter.shoot();
+                break;
+            case '2':
+                //todo: add stuff
+                break;
+        }
         
     }
 
