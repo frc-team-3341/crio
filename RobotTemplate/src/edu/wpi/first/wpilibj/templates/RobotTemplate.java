@@ -25,10 +25,6 @@ import org.wvrobotics.control.JoystickListener;
  * directory.
  */
 public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
     private Controller controller;
     private RobotDrive drive;
     private Shooter shooter;
@@ -54,23 +50,14 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         eltoro = new ElToro(VAN_DOOR, ACQUIRER);
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic() {
 
     }
 
-    /**
-     * This function is called periodically during operator control
-     */
     public void teleopPeriodic() {
         drive.mecanumDrive_Polar(controller.getX(), controller.getY(), controller.getZ());
     }
     
-    /**
-     * This function is called periodically during test mode
-     */
     public void testPeriodic() {    
     }
 
