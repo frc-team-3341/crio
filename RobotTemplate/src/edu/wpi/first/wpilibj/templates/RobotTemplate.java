@@ -74,10 +74,12 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void teleopPeriodic() {
+        shooter.getPotVal();
         drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
     }
     
-    public void testPeriodic() {    
+    public void testPeriodic() {
+        //TODO: add code to calibrate potentiometer
     }
 
     public void joystickMoved(JoystickEvent e) {
