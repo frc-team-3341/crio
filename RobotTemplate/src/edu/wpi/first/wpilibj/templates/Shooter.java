@@ -9,13 +9,11 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Jaguar;
 import org.wvrobotics.util.Robot;
 
-/**
- *
+/** *
  * @author George "Agent 10" Troulis
  */
 public class Shooter {
-    
-    
+    //TODO: add potentiometer somehow
     private Jaguar motor_1;
     private Jaguar motor_2;
     
@@ -27,6 +25,11 @@ public class Shooter {
     public void shoot(){
         motor_1.set(1.0);
         motor_2.set(1.0);
+    }
+    
+    public void reset(){
+        motor_1.set(-1.0);
+        motor_2.set(-1.0);
     }
     
     public void stop(){
