@@ -34,7 +34,8 @@ import org.wvrobotics.control.JoystickListener;
  * directory.
  */
 public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
-    private Controller controller;
+    private Controller drive_controller;
+    private Controller shooter_controller;
     private RobotDrive drive;
     private Shooter shooter;
     private ElToro eltoro;
@@ -52,9 +53,15 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private final int ACQUIRER2 = 9;
     
     public void robotInit() {
-        controller = ControllerManager.getInstance().getController(1, 16);
-        controller.addButtonListener(this);
-        controller.addJoystickListener(this);
+        //controllers
+        drive_controller = ControllerManager.getInstance().getController(1, 16);
+        drive_controller.addButtonListener(this);
+        drive_controller.addJoystickListener(this);
+        
+        shooter_controller = ControllerManager.getInstance().getController(2, 16);
+        shooter_controller.addButtonListener(this);
+        shooter_controller.addJoystickListener(this);
+        //motor stuff
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
         eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
@@ -65,7 +72,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void teleopPeriodic() {
-        drive.mecanumDrive_Polar(controller.getX(), controller.getY(), controller.getZ());
+        drive.mecanumDrive_Polar(drive_controller.getX(), drive_controller.getY(), drive_controller.getZ());
     }
     
     public void testPeriodic() {    
@@ -78,43 +85,72 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonPressed(ButtonEvent e) {
-        switch(e.getButton()) {
-            case '1':
-                shooter.shoot();
-                break;
-            case '2':
-                eltoro.collect();
-                break;
-            case '3':
-                eltoro.pitch_down();
-                break;
-            case '4':
-                eltoro.pitch_up();
-                break;
-            case '5':
-                eltoro.dump();
-                break;
+        if(e.getSource() == drive_controller) {
+            switch(e.getButton()) {
+                case 1:
+                    shooter.shoot();
+                    break;
+                case 2:
+                    shooter.reset();
+                    break;
+                case 3:
+                    //--\\
+                    break;
+                case 4:
+                    //--\\
+                    break;
+            }
         }
-        
+        else { //source == shooter_controller
+            switch(e.getButton()) {
+                case 1:
+                    eltoro.collect();
+                    break;
+                case 2:
+                   eltoro.dump();
+                   break;
+                case 3:
+                    eltoro.pitch_down();
+                    break;
+                case 4:
+                    eltoro.pitch_up();
+                    break;
+            }
+        }
     }
 
     public void buttonReleased(ButtonEvent e) {
-        switch(e.getButton()){
-            case '1':
-                shooter.stop();
-                break;
-            case '2':
-                eltoro.acquirer_stop();
-                break;
-            case '3':
-                eltoro.pitch_stop();
-                break;
-            case '4':
-                eltoro.pitch_stop();
-                break;
-            case '5':
-                eltoro.acquirer_stop();
-                break;
+        if(e.getSource() == drive_controller) {
+            switch(e.getButton()) {
+                case 1:
+                    shooter.stop();
+                    break;
+                case 2:
+                    shooter.stop();
+                    break;
+                case 3:
+                    //--\\
+                    break;
+                case 4:
+                    //--\\
+                    break;
+            }
+        }
+        else { //source == shooter_controller
+            switch(e.getButton()) {
+                case 1:
+                    eltoro.acquirer_stop();
+                    break;
+                case 2:
+                   eltoro.acquirer_stop();
+                   break;
+                case 3:
+                    eltoro.pitch_stop();
+                    break;
+                case 4:
+                    eltoro.pitch_stop();
+                    break;
+            }
         }
     }
 
