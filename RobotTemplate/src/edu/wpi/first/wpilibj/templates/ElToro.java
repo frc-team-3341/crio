@@ -7,7 +7,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Jaguar;
-import org.wvrobotics.util.Robot;
+import edu.wpi.first.wpilibj.Talon;
 
 /**
  *
@@ -16,13 +16,13 @@ import org.wvrobotics.util.Robot;
 public class ElToro {
 
     private Jaguar vandoor;
-    private Jaguar acquirer1;
-    private Jaguar acquirer2;
+    private Talon acquirer1;
+    private Talon acquirer2;
     
     public ElToro(int vanDoor, int acquirer_1, int acquirer_2) {
         vandoor = new Jaguar(vanDoor);
-        acquirer1 = new Jaguar(acquirer_1);
-        acquirer2 = new Jaguar(acquirer_2);
+        acquirer1 = new Talon(acquirer_1);
+        acquirer2 = new Talon(acquirer_2);
     }
     
     public void pitch_up () {
@@ -50,5 +50,5 @@ public class ElToro {
     public void acquirer_stop() {
         acquirer1.set(0.0);
         acquirer2.set(0.0);
-    }
+    }    
 }
