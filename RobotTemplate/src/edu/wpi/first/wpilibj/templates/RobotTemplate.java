@@ -63,7 +63,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         shooter_controller.addJoystickListener(this);
         //motor stuff
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
-        shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        //shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
         eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
     }
 
@@ -72,7 +74,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void teleopPeriodic() {
-        drive.mecanumDrive_Polar(drive_controller.getX(), drive_controller.getY(), drive_controller.getZ());
+        drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
     }
     
     public void testPeriodic() {    
@@ -85,7 +87,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonPressed(ButtonEvent e) {
-        if(e.getSource() == drive_controller) {
+        if(e.getSource().getPort() == 2) {//shooter joystick
             switch(e.getButton()) {
                 case 1:
                     shooter.shoot();
@@ -101,7 +103,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     break;
             }
         }
-        else { //source == shooter_controller
+        else { //source == driver_controller
             switch(e.getButton()) {
                 case 1:
                     eltoro.collect();
@@ -120,7 +122,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonReleased(ButtonEvent e) {
-        if(e.getSource() == drive_controller) {
+        if(e.getSource().getPort() == 2) {//shooter joystick
             switch(e.getButton()) {
                 case 1:
                     shooter.stop();
@@ -136,7 +138,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     break;
             }
         }
-        else { //source == shooter_controller
+        else { //source == driver_controller
             switch(e.getButton()) {
                 case 1:
                     eltoro.acquirer_stop();
