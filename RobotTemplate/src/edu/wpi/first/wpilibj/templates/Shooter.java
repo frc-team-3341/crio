@@ -23,14 +23,14 @@ public class Shooter {
     private AnalogPotentiometer pot;
 
     private Jaguar motor_1;
-    //private Jaguar motor_2;
+    private Jaguar motor_2;
     private int state; // 1 forward, 0 stopped, -1 reverse
 
     private double potVal;
 
     public Shooter(int _motor_1, int _motor_2) {
         motor_1 = new Jaguar(_motor_1);
-       // motor_2 = new Jaguar(_motor_2);
+        motor_2 = new Jaguar(_motor_2);
         pot = new AnalogPotentiometer(4,54);
         state = 0;
         this.getPotVal();
@@ -40,7 +40,7 @@ public class Shooter {
         if (potVal < shooterMaxPosition) {
             motor_1.set(1.0);
             state = 1;
-            //motor_2.set(1.0);
+            motor_2.set(1.0);
         } else {
             this.stop();
         }
@@ -50,7 +50,7 @@ public class Shooter {
         if (potVal > shooterMinPosition) {
             motor_1.set(-0.5);
             state = -1;
-            //motor_2.set(-1.0);
+            motor_2.set(-1.0);
         } else {
             this.stop();
         }
@@ -59,7 +59,7 @@ public class Shooter {
     public void stop() {
         state = 0;
         motor_1.set(0);
-        //motor_2.set(0);
+        motor_2.set(0);
     }
     
     public int getState(){
