@@ -80,12 +80,13 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void teleopPeriodic() {
+        //debug stuff
         System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
+        shooter.adjustMax(shooter_controller);
         shooter.tick();
-              //shooter.getPotVal();
         drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
     }
-    
+      
     public void testPeriodic() {
         //TODO: add code to calibrate potentiometer
     }
@@ -93,6 +94,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void throttleMoved(JoystickEvent e) {
+        //shooter.setMax(shooter_controller.getThrottle());
     }
 
     public void buttonPressed(ButtonEvent e) {
