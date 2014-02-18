@@ -17,6 +17,8 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import org.wvrobotics.control.ButtonEvent;
@@ -51,6 +53,8 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private final int VAN_DOOR = 7;
     private final int ACQUIRER1 = 8;
     private final int ACQUIRER2 = 9;
+    //Encoder
+    private Encoder encode1;
     
     public void robotInit() {
         //controllers
@@ -65,8 +69,10 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-        //shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
+        shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
         eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
+        //Encoder Test
+        //encode1 = new Encoder(14, 0);
     }
 
     public void autonomousPeriodic() {
@@ -74,14 +80,15 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void teleopPeriodic() {
-        shooter.getPotVal();
+        System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
+        shooter.tick();
+              //shooter.getPotVal();
         drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
     }
     
     public void testPeriodic() {
         //TODO: add code to calibrate potentiometer
     }
-
     public void joystickMoved(JoystickEvent e) {
     }
 
@@ -124,23 +131,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void buttonReleased(ButtonEvent e) {
-        if(e.getSource().getPort() == 2) {//shooter joystick
-            switch(e.getButton()) {
-                case 1:
-                    shooter.stop();
-                    break;
-                case 2:
-                    shooter.stop();
-                    break;
-                case 3:
-                    //--\\
-                    break;
-                case 4:
-                    //--\\
-                    break;
-            }
-        }
-        else { //source == driver_controller
+        if(e.getSource().getPort() == 1) { //source == driver_controller
             switch(e.getButton()) {
                 case 1:
                     eltoro.acquirer_stop();
