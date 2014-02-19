@@ -26,11 +26,11 @@ public class ElToro {
     }
     
     public void pitch_up () {
-        vandoor.set(1.0);  
+        vandoor.set(0.5);  
     }
     
     public void pitch_down () {
-        vandoor.set(-1.0);
+        vandoor.set(-0.5);
     }
     
     public void pitch_stop() {
@@ -38,13 +38,13 @@ public class ElToro {
     }
     
     public void collect() {
-        acquirer1.set(1.0);
-        acquirer2.set(-1.0);
+        acquirer1.set(0.5);
+        acquirer2.set(-0.5);
     }
     
     public void dump() {
-        acquirer1.set(-1.0);
-        acquirer2.set(1.0);
+        acquirer1.set(-0.5);
+        acquirer2.set(0.5);
     }
     
     public void acquirer_stop() {
