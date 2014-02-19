@@ -5,9 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/*
+ * Code developed by:
+ *  George Troulis
+ *  Adam <something>
+ *  Colby Hester
+ *  Brenda <something>
+ *
+ *  Code available on Github
+*/
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import org.wvrobotics.control.ButtonEvent;
@@ -25,62 +36,119 @@ import org.wvrobotics.control.JoystickListener;
  * directory.
  */
 public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
-    private Controller controller;
+    private Controller drive_controller;
+    private Controller shooter_controller;
     private RobotDrive drive;
     private Shooter shooter;
+    private ElToro eltoro;
     //wheels
     private final int top_left = 1;
     private final int bottom_left = 2;
     private final int top_right = 3;    
     private final int bottom_right = 4;
+    //shooter stuff
+    private final int SHOOTER_MOTOR_1 = 5;
+    private final int SHOOTER_MOTOR_2 = 6;
+    //ElToro Motors
+    private final int VAN_DOOR = 7;
+    private final int ACQUIRER1 = 8;
+    private final int ACQUIRER2 = 9;
+    //Encoder
+    private Encoder encode1;
     
     public void robotInit() {
-        controller = ControllerManager.getInstance().getController(1, 16);
-        controller.addButtonListener(this);
-        controller.addJoystickListener(this);
-        drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right); //1 and 2 are PWM port numbers
-        shooter = new Shooter();
+        //controllers
+        drive_controller = ControllerManager.getInstance().getController(1, 16);
+        drive_controller.addButtonListener(this);
+        drive_controller.addJoystickListener(this);
+        
+        shooter_controller = ControllerManager.getInstance().getController(2, 16);
+        shooter_controller.addButtonListener(this);
+        shooter_controller.addJoystickListener(this);
+        //motor stuff
+        drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
+        eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
+        //Encoder Test
+        //encode1 = new Encoder(14, 0);
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic() {
 
     }
 
-    /**
-     * This function is called periodically during operator control
-     */
     public void teleopPeriodic() {
-        drive.mecanumDrive_Polar(controller.getX(), controller.getY(), controller.getZ());
+        //debug stuff
+        System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
+        shooter.adjustMax(shooter_controller);
+        shooter.tick();
+        drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
     }
-    
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {    
+      
+    public void testPeriodic() {
+        //TODO: add code to calibrate potentiometer
     }
-
     public void joystickMoved(JoystickEvent e) {
     }
 
     public void throttleMoved(JoystickEvent e) {
+        //shooter.setMax(shooter_controller.getThrottle());
     }
 
     public void buttonPressed(ButtonEvent e) {
-        if(e.getButton() == 1)
-            shooter.shoot();
-        
+        if(e.getSource().getPort() == 2) {//shooter joystick
+            switch(e.getButton()) {
+                case 1:
+                    shooter.shoot();
+                    break;
+                case 2:
+                    shooter.reset();
+                    break;
+                case 3:
+                    //--\\
+                    break;
+                case 4:
+                    //--\\
+                    break;
+            }
+        }
+        else { //source == driver_controller
+            switch(e.getButton()) {
+                case 1:
+                    eltoro.collect();
+                    break;
+                case 2:
+                   eltoro.dump();
+                   break;
+                case 3:
+                    eltoro.pitch_down();
+                    break;
+                case 4:
+                    eltoro.pitch_up();
+                    break;
+            }
+        }
     }
 
     public void buttonReleased(ButtonEvent e) {
-        if(e.getButton() == 1)
-            shooter.stop();
+        if(e.getSource().getPort() == 1) { //source == driver_controller
+            switch(e.getButton()) {
+                case 1:
+                    eltoro.acquirer_stop();
+                    break;
+                case 2:
+                   eltoro.acquirer_stop();
+                   break;
+                case 3:
+                    eltoro.pitch_stop();
+                    break;
+                case 4:
+                    eltoro.pitch_stop();
+                    break;
+            }
+        }
     }
 
     public void buttonTyped(ButtonEvent e) {
