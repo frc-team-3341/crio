@@ -42,11 +42,11 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private Shooter shooter;
     private ElToro eltoro;
     //wheels
-    private Jaguar top_left;
-    private Jaguar bottom_left;
-    private Jaguar top_right;    
-    private Jaguar bottom_right;
-    //shooter stuff
+    private final int top_left = 1;
+    private final int bottom_left = 2;
+    private final int top_right = 3;    
+    private final int bottom_right = 4;
+    //shooter motors
     private final int SHOOTER_MOTOR_1 = 5;
     private final int SHOOTER_MOTOR_2 = 6;
     //ElToro Motors
@@ -55,13 +55,15 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private final int ACQUIRER2 = 9;
     //Encoder
     private SpeedController control;
+    //Other stuff
+    public double speedModifier = 1.0;
     
     public void robotInit() {
         //Drive motors
-        top_left = new Jaguar(1);
-        bottom_left = new Jaguar(2);
-        top_right = new Jaguar(3);   
-        bottom_right = new Jaguar(4);
+//        top_left = new Jaguar(1);
+//        bottom_left = new Jaguar(2);
+//        top_right = new Jaguar(3);   
+//        bottom_right = new Jaguar(4);
         //controllers
         drive_controller = ControllerManager.getInstance().getController(1, 16);
         drive_controller.addButtonListener(this);
@@ -74,18 +76,19 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        //Other functionality
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
         eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
         //Encoder Initialization
-        control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
-        control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
+//        control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
+//        control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
     }
 
     public void autonomousPeriodic() 
     {
-        control.encoderSetDistancePerPulse(5); //Parameter needs to be set by autonomous coder
-        control.setEncoderSpeed(5,5,5,5); //Parameter needs to be set by autonomous coder
-        control.regulate(top_left, bottom_left, top_right, bottom_right);
+//        control.encoderSetDistancePerPulse(5); //Parameter needs to be set by autonomous coder
+//        control.setEncoderSpeed(5,5,5,5); //Parameter needs to be set by autonomous coder
+//        control.regulate(top_left, bottom_left, top_right, bottom_right);
     }
 
     public void teleopPeriodic() {
@@ -94,9 +97,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         shooter.adjustMax(shooter_controller);
         shooter.tick();
         drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
-        control.encoderSetDistancePerPulse(5);
-        control.setEncoderSpeed(10,10,10,10);
-        control.Encoderoutput();
+//        control.encoderSetDistancePerPulse(5);
+//        control.setEncoderSpeed(10,10,10,10);
+//        control.Encoderoutput();
     }
       
     public void testPeriodic() {
@@ -106,8 +109,13 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
 
     public void throttleMoved(JoystickEvent e) {
-        //shooter.setMax(shooter_controller.getThrottle());
-    }
+        if(e.getSource().getPort() == 1) { //driver controller
+            
+        }
+        else { //shooter controller
+            
+        }
+    }      
 
     public void buttonPressed(ButtonEvent e) {
         if(e.getSource().getPort() == 2) {//shooter joystick
@@ -117,12 +125,6 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     break;
                 case 2:
                     shooter.reset();
-                    break;
-                case 3:
-                    //--\\
-                    break;
-                case 4:
-                    //--\\
                     break;
             }
         }
@@ -139,6 +141,12 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     break;
                 case 4:
                     eltoro.pitch_up();
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
                     break;
             }
         }
