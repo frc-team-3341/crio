@@ -56,7 +56,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     //Encoder
     private SpeedController control;
     //Other stuff
-    public double speedModifier = 1.0;
+    public double speedModifier = 0.75;
     
     public void robotInit() {
         //Drive motors
@@ -143,10 +143,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     eltoro.pitch_up();
                     break;
                 case 5:
+                    speedModifier = 0.5;
                     break;
                 case 6:
+                    speedModifier = 0.75;
                     break;
                 case 7:
+                    speedModifier = 1.00;  
+                    break;
+                case 8:
+                    speedModifier *= -1;
                     break;
             }
         }
