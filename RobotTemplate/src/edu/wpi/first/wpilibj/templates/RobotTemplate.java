@@ -96,7 +96,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
         shooter.adjustMax(shooter_controller);
         shooter.tick();
-        drive.mecanumDrive_Cartesian(drive_controller.getX(), drive_controller.getY(), -drive_controller.getZ(), 0);
+        drive.mecanumDrive_Cartesian(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, -drive_controller.getZ() * speedModifier, 0);
 //        control.encoderSetDistancePerPulse(5);
 //        control.setEncoderSpeed(10,10,10,10);
 //        control.Encoderoutput();
