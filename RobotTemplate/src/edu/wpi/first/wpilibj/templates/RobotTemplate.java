@@ -54,7 +54,8 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private final int ACQUIRER1 = 8;
     private final int ACQUIRER2 = 9;
     //Encoder
-    private SpeedController control;
+//
+    
     //Other stuff
     public double speedModifier = 0.75;
     
@@ -155,9 +156,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     speedModifier *= -1;
                     break;
             }
-        }
+       
     }
-
+    }
     public void buttonReleased(ButtonEvent e) {
         if(e.getSource().getPort() == 1) { //source == driver_controller
             switch(e.getButton()) {
