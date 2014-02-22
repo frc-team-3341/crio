@@ -40,7 +40,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private Controller shooter_controller;
     private RobotDrive drive;
     private Shooter shooter;
-    private ElToro eltoro;
+    private Acquirer acquirer;
     //wheels
     private final int top_left = 1;
     private final int bottom_left = 2;
@@ -79,7 +79,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         //Other functionality
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
-        eltoro = new ElToro(VAN_DOOR, ACQUIRER1, ACQUIRER2);
+        acquirer = new Acquirer(VAN_DOOR, ACQUIRER1, ACQUIRER2);
         //Encoder Initialization
 //        control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
 //        control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
@@ -95,6 +95,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     public void teleopPeriodic() {
         //debug stuff
         System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
+        //functional stuff
         shooter.adjustMax(shooter_controller);
         shooter.tick();
         drive.mecanumDrive_Cartesian(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, -drive_controller.getZ() * speedModifier, 0);
@@ -132,16 +133,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         else { //source == driver_controller
             switch(e.getButton()) {
                 case 1:
-                    eltoro.collect();
+                    acquirer.collect();
                     break;
                 case 2:
-                   eltoro.dump();
+                   acquirer.dump();
                    break;
                 case 3:
-                    eltoro.pitch_down();
+                    acquirer.pitch_down();
                     break;
                 case 4:
-                    eltoro.pitch_up();
+                    acquirer.pitch_up();
                     break;
                 case 5:
                     speedModifier = 0.5;
@@ -163,16 +164,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         if(e.getSource().getPort() == 1) { //source == driver_controller
             switch(e.getButton()) {
                 case 1:
-                    eltoro.acquirer_stop();
+                    acquirer.acquirer_stop();
                     break;
                 case 2:
-                   eltoro.acquirer_stop();
+                   acquirer.acquirer_stop();
                    break;
                 case 3:
-                    eltoro.pitch_stop();
+                    acquirer.pitch_stop();
                     break;
                 case 4:
-                    eltoro.pitch_stop();
+                    acquirer.pitch_stop();
                     break;
             }
         }
