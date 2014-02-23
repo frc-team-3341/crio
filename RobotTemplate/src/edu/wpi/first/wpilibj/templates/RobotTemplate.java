@@ -42,17 +42,17 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     private Shooter shooter;
     private Acquirer acquirer;
     //wheels
-    private final int top_left = 1;
-    private final int bottom_left = 2;
-    private final int top_right = 3;    
-    private final int bottom_right = 4;
+    private final int top_left = 2;
+    private final int bottom_left = 3;
+    private final int top_right = 4;    
+    private final int bottom_right = 5;
     //shooter motors
-    private final int SHOOTER_MOTOR_1 = 5;
-    private final int SHOOTER_MOTOR_2 = 6;
+    private final int SHOOTER_MOTOR_1 = 6;
+    private final int SHOOTER_MOTOR_2 = 7;
     //ElToro Motors
-    private final int VAN_DOOR = 7;
-    private final int ACQUIRER1 = 8;
-    private final int ACQUIRER2 = 9;
+    private final int VAN_DOOR = 8;
+    private final int ACQUIRER1 = 9;
+    private final int ACQUIRER2 = 10;
     //Encoder
 //
     
