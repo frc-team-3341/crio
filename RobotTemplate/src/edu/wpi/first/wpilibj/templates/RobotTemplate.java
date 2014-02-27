@@ -17,10 +17,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 import org.wvrobotics.control.ButtonEvent;
 import org.wvrobotics.control.ButtonListener;
 import org.wvrobotics.control.Controller;
@@ -37,7 +36,7 @@ import org.wvrobotics.control.JoystickListener;
  */
 public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
     private Controller drive_controller;
-    private Controller shooter_controller;
+    private Controller acquirer_controller;
     private RobotDrive drive;
     private Shooter shooter;
     private Acquirer acquirer;
@@ -56,6 +55,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     //Encoder
 //
     
+    // shooter uses these
+    private double prevTime;
+    
     //Other stuff
     public double speedModifier = 0.75;
     
@@ -70,15 +72,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         drive_controller.addButtonListener(this);
         drive_controller.addJoystickListener(this);
         
-        shooter_controller = ControllerManager.getInstance().getController(2, 16);
-        shooter_controller.addButtonListener(this);
-        shooter_controller.addJoystickListener(this);
+        acquirer_controller = ControllerManager.getInstance().getController(2, 16);
+        acquirer_controller.addButtonListener(this);
+        acquirer_controller.addJoystickListener(this);
         //motor stuff
         drive = new RobotDrive(top_left, bottom_left, top_right, bottom_right);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         //Other functionality
         shooter = new Shooter(SHOOTER_MOTOR_1, SHOOTER_MOTOR_2);
+        prevTime = 0.0;
         acquirer = new Acquirer(VAN_DOOR, ACQUIRER1, ACQUIRER2);
         //Encoder Initialization
 //        control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
@@ -94,9 +97,19 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 
     public void teleopPeriodic() {
         //debug stuff
-        System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState());
+        //Time.timeval now = Time.timeval();
+        Timer t = new Timer();
+        double now;
+        now = Timer.getUsClock();
+        
+        // we want angular velocity.
+        // it's most accurate to say (delta pot / delta time): we don't NEED to use degrees.
+        System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
+                + " timeDelta: " + (now - prevTime) );
+        
+        prevTime = now;
         //functional stuff
-        shooter.adjustMax(shooter_controller);
+        shooter.adjustMax(acquirer_controller);
         shooter.tick();
         drive.mecanumDrive_Cartesian(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, -drive_controller.getZ() * speedModifier, 0);
 //        control.encoderSetDistancePerPulse(5);
@@ -120,17 +133,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }      
 
     public void buttonPressed(ButtonEvent e) {
-        if(e.getSource().getPort() == 2) {//shooter joystick
-            switch(e.getButton()) {
-                case 1:
-                    shooter.shoot();
-                    break;
-                case 2:
-                    shooter.reset();
-                    break;
-            }
-        }
-        else { //source == driver_controller
+        if(e.getSource().getPort() == 1) {//Acquirer joystick
             switch(e.getButton()) {
                 case 1:
                     acquirer.collect();
@@ -143,6 +146,16 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     break;
                 case 4:
                     acquirer.pitch_up();
+                    break;
+            }
+        }
+        else { //source == driver_controller
+            switch(e.getButton()) {
+                case 1:
+                    shooter.shoot();
+                    break;
+                case 2:
+                    shooter.reset();
                     break;
                 case 5:
                     speedModifier = 0.5;
@@ -161,7 +174,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     }
     }
     public void buttonReleased(ButtonEvent e) {
-        if(e.getSource().getPort() == 1) { //source == driver_controller
+        if(e.getSource().getPort() == 1) { //source == accquirer_controller
             switch(e.getButton()) {
                 case 1:
                     acquirer.acquirer_stop();

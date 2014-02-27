@@ -10,8 +10,9 @@ import edu.wpi.first.wpilibj.Jaguar;
 import org.wvrobotics.control.Controller;
 
 /**
- * *
- * @author George "Agent 10" 
+ * 
+ * @author George "Agent 10" Troulis
+ * @contributor Prathyush
  */
 public class Shooter {
 
@@ -38,8 +39,8 @@ public class Shooter {
 
     public void shoot() {
         if (potVal < shooterMaxPosition) {
-            motor_1.set(1.0);
             state = 1;
+            motor_1.set(1.0);
             motor_2.set(1.0);
         } else {
             this.stop();
@@ -48,9 +49,9 @@ public class Shooter {
 
     public void reset() {
         if (potVal > shooterMinPosition) {
-            motor_1.set(-0.5);
             state = -1;
-            motor_2.set(-1.0);
+            motor_1.set(-0.2);
+            motor_2.set(-0.2);
         } else {
             this.stop();
         }
@@ -82,6 +83,7 @@ public class Shooter {
 
     public void tick() {
         this.potVal = pot.get();
+        
         if(state == 1){
             if(potVal >= shooterMaxPosition){
                 stop();
