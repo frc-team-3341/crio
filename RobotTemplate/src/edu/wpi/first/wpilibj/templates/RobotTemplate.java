@@ -38,7 +38,7 @@ import org.wvrobotics.control.JoystickListener;
 public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
     private Controller drive_controller;
     private Controller acquirer_controller;
-    private RobotDrive drive;
+    private MechanumDrive drive;
     private Shooter shooter;
     private Acquirer acquirer;    
     
@@ -54,12 +54,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
      * All the variables and objects are initialized in this method. It is called once.
      */
     public void robotInit() {
-        //Drive motors
-        //top_left = new Jaguar(1);
-        //bottom_left = new Jaguar(2);
-        //top_right = new Jaguar(3);   
-        //bottom_right = new Jaguar(4);
-        
+
         //controllers
         drive_controller = ControllerManager.getInstance().getController(1, 16);
         drive_controller.addButtonListener(this);
@@ -69,9 +64,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         acquirer_controller.addButtonListener(this);
         acquirer_controller.addJoystickListener(this);
         //motor stuff
-        drive = new RobotDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        drive = new MechanumDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
+        drive.setInvertedMotor(DriveMotorIndex.frontLeft, true);
+        drive.setInvertedMotor(DriveMotorIndex.rearLeft, true);
         //Other functionality
         shooter = new Shooter(MotorPorts.shooter_1, MotorPorts.shooter_2);
         prevTime = 0.0;
@@ -110,7 +105,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         //functional stuff
         shooter.adjustMax(acquirer_controller);
         shooter.tick();
-        drive.mecanumDrive_Cartesian(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, -drive_controller.getZ() * speedModifier, 0);
+        drive.drive(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, -drive_controller.getZ() * speedModifier);
         //control.encoderSetDistancePerPulse(5);
         //control.setEncoderSpeed(10,10,10,10);
         //control.Encoderoutput();
