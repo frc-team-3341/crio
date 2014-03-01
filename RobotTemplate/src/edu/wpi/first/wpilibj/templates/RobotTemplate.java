@@ -5,13 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/*
- * Code developed by:
- *  George Troulis
- *  Adam Tedeschi
- *  Colby Hester
- *  Brenda <something>
- *  David Mao
+/**
+ * 
+ *  @author George Troulis
+ *  @author Adam Tedeschi
+ *  @author Colby Hester
+ *  @author Brenda <something>
+ *  @author David Mao
  *
  *  Code available on Github
 */
@@ -62,6 +62,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
     //Other stuff
     public double speedModifier = 0.75;
     
+    /**
+     * All the variables and objects are initialized in this method. It is called once.
+     */
     public void robotInit() {
         //Drive motors
 //        top_left = new Jaguar(1);
@@ -89,6 +92,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 //        control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
     }
 
+    /**
+     * The autonomous code goes here. Called every 20 milliseconds(untested) during autonomous mode, which lasts 10 seconds
+     */
     public void autonomousPeriodic() 
     {
 //        control.encoderSetDistancePerPulse(5); //Parameter needs to be set by autonomous coder
@@ -96,6 +102,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 //        control.regulate(top_left, bottom_left, top_right, bottom_right);
     }
 
+    /**
+     * The main code that is called during user control. Called every 20 milliseconds(tested) During user control mode, which lasts about 2 minutes.
+     */
     public void teleopPeriodic() {
         //debug stuff
         //Time.timeval now = Time.timeval();
@@ -117,7 +126,10 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 //        control.setEncoderSpeed(10,10,10,10);
 //        control.Encoderoutput();
     }
-      
+    
+    /**
+     * This function is not called during competition mode, but it can be called through the driver station. It is used to initialize the potentiometer.
+     */
     public void testPeriodic() {
         //TODO: add code to calibrate potentiometer
     }
@@ -133,6 +145,10 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         }
     }      
 
+    /**
+     * Handles all button presses.
+     * @param e A button event that caries information about which button(s) are pressed. Different methods are called based on what button was pressed.
+     */
     public void buttonPressed(ButtonEvent e) {
         if(e.getSource().getPort() == 1) {//Acquirer joystick
             switch(e.getButton()) {
@@ -171,9 +187,13 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
                     speedModifier *= -1;
                     break;
             }
-       
+        
+        }
     }
-    }
+    /**
+     * Handles button releases
+     * @param e A button event that caries information about which button(s) are released. Different methods are called based on what button was released.
+     */
     public void buttonReleased(ButtonEvent e) {
         if(e.getSource().getPort() == 1) { //source == accquirer_controller
             switch(e.getButton()) {

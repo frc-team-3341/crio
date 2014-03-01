@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -12,7 +7,8 @@ import org.wvrobotics.control.Controller;
 /**
  * 
  * @author George "Agent 10" Troulis
- * @contributor Prathyush
+ * @author Prathyush Katukojwala
+ *  
  */
 public class Shooter {
 
@@ -28,7 +24,11 @@ public class Shooter {
     private int state; // 1 forward, 0 stopped, -1 reverse
 
     private double potVal;
-
+    /**
+     * 
+     * @param _motor_1 PWM Port where motor 1 is connected
+     * @param _motor_2 PWM Port where motor 2 is connected
+     */
     public Shooter(int _motor_1, int _motor_2) {
         motor_1 = new Jaguar(_motor_1);
         motor_2 = new Jaguar(_motor_2);
@@ -37,6 +37,9 @@ public class Shooter {
         this.getPotVal();
     }
 
+    /**
+     * Moves both motors forward at top speed if there is room for movement.
+     */
     public void shoot() {
         if (potVal < shooterMaxPosition) {
             state = 1;
@@ -47,6 +50,9 @@ public class Shooter {
         }
     }
 
+    /**
+     * Moves both motors backwards slowly if there is room for movement.
+     */
     public void reset() {
         if (potVal > shooterMinPosition) {
             state = -1;
@@ -56,31 +62,58 @@ public class Shooter {
             this.stop();
         }
     }
-        
+    
+    /**
+     * Stops the motors from moving completely.
+     */
     public void stop() {
         state = 0;
         motor_1.set(0);
         motor_2.set(0);
     }
     
+    /**
+     * Gets the state of the motors.
+     * 
+     * @return Returns the state of the catapult motors. 
+     *  1 = forward
+     *  0 = stopped
+     *  -1 = backwards
+     */
     public int getState(){
         return state;
     }
 
+    /**
+     * Gets the value of the potentiometer.
+     * 
+     * @return The value of the potentiometer.
+     */
     public double getPotVal() {
         return potVal;
     }
     
+    /**
+     * Adjusts the max amount that the catapult can be pulled back by a set amount.
+     * @param amount The amount by which to set the max position.
+     */
     public void setMax(int amount) {
         shooterMaxPosition = amount;
     }
     
+    /**
+     * Adjusts the max amount that the catapult can be pulled back based on the throttle(slider) of a joystick.
+     * @param c The controller to extract the throttle amount from.
+     */
     public void adjustMax(Controller c) {
         double rawVal = c.getThrottle();
         int processedVal = (int) ((rawVal + 1) * 25); //
         shooterMaxPosition = shooterAbsoluteMaxPosition - processedVal;
     }
 
+    /**
+     * Updates the value of the potentiometer and stops the motors if necessary.
+     */
     public void tick() {
         this.potVal = pot.get();
         
