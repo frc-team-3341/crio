@@ -8,9 +8,10 @@
 /*
  * Code developed by:
  *  George Troulis
- *  Adam <something>
+ *  Adam Tedeschi
  *  Colby Hester
  *  Brenda <something>
+ *  David Mao
  *
  *  Code available on Github
 */
