@@ -15,6 +15,14 @@ public class Targeting {
         targetingTable.putNumber("horizontalDistance", 0.0);
         //targetingTable.putNumber("angle", 15.0);
         //targetingTable.putNumber("azimuth", 3000.0);
+        targetingTable.putNumber("hotGoal", 0.0);
+        //0 -> unknown
+        //1 -> left
+        //2 -> right
+    }
+    
+    public double getHotGoal() {
+        return targetingTable.getNumber("hotGoal");
     }
 
     public boolean isConnected()
