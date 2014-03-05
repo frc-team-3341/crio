@@ -51,23 +51,28 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      */
     public void robotInit() {
 
-        //controllers
+        //controllers\
+        System.out.println("test1");
         drive_controller = ControllerManager.getInstance().getController(1, 16);
         drive_controller.addButtonListener(this);
         drive_controller.addJoystickListener(this);
-
+        System.out.println("test2");
         acquirer_controller = ControllerManager.getInstance().getController(2, 16);
         acquirer_controller.addButtonListener(this);
         acquirer_controller.addJoystickListener(this);
-        //motor stuff
+        //motor stuff]
+        System.out.println("test3");
         drive = new MechanumDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
         drive.setInvertedMotor(DriveMotorIndex.frontRight, true);
         drive.setInvertedMotor(DriveMotorIndex.rearRight, true);
         //Other functionality
+        System.out.println("test4");
         shooter = new Shooter(MotorPorts.shooter_1, MotorPorts.shooter_2);
         prevTime = 0.0;
+        System.out.println("test5");
         acquirer = new Acquirer(MotorPorts.van_door, MotorPorts.acquirer_left, MotorPorts.acquirer_right);
       //  targeting = new Targeting();
+        System.out.println("test6");
         shotInAutonomous = false;
         //Encoder Initialization
         //control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
@@ -151,7 +156,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         
        // System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
         //        + " timeDelta: " + (now - prevTime));
-
+        System.out.println("Teleop");
         prevTime = now;
         //functional stuff
         shooter.adjustMax(acquirer_controller);

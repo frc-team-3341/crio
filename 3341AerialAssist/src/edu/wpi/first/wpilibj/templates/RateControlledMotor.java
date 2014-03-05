@@ -52,8 +52,11 @@ public final class RateControlledMotor implements PIDOutput {
     public void pidWrite(double output) {
         // Treat new PID computed power output as an "adjustment"
         double rateOutput = _Motor.get() + output;
+        System.out.println("output" + output);
+        System.out.println("rateoutput" + rateOutput);
         rateOutput = Math.min(1.0, rateOutput);
         rateOutput = Math.max(-1.0, rateOutput);
+        System.out.println("rateouput2");
         _Motor.set(rateOutput);
     }
 
