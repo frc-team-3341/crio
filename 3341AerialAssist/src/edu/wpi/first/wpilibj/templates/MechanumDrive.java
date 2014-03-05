@@ -140,18 +140,14 @@ public class MechanumDrive {
         normalize(wheelSpeeds);
         
         for(int i = 0; i < this.numMotors; i++) {
-            m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
-            try{
-            Thread.sleep(200);
-            }
-            catch(InterruptedException e){
-                
-            }
+           // m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+           // m_motors[i].
             System.out.println("intial: " + wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
             System.out.println("adjusted: " + m_pid[i].getF());
             System.out.println("another print" + m_pid[i].get());
             System.out.println(m_pid[i].isEnable());
-            m_motors[i].pidWrite(m_pid[i].getF());
+            m_motors[i]._Motor.set(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+           // m_motors[i].pidWrite(m_pid[i].getF());
         }
     }
 }

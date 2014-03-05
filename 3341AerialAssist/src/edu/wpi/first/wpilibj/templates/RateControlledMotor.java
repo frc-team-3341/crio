@@ -20,7 +20,7 @@ public final class RateControlledMotor implements PIDOutput {
     /**
      * Motor to adjust power on.
      */
-    private final SpeedController _Motor;
+    public final SpeedController _Motor;
 
     /**
      * Construct a new instance and associate a speed controller with the
