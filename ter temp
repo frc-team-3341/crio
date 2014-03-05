@@ -1,0 +1,73 @@
+* ed802f4 (HEAD, temp) XML fixes. Merge Conflict resolution.
+| * 4e22f2f (origin/master, master) should fix everything.
+| * 5ac7911 Merge fixes.
+|/  
+*   8bd2c1c Work from 3/2/14
+|\  
+| * 11b3f62 Added autonomous. Still incomplete: Unknown constants(distance traveled based on time/speed?), unknowns about robot behavior(need thread.sleeps?). Three way switch behavior for hot/cold. Code compiles, but autonomous will not behave anywhere close to correctly yet.
+| * 0c87985 Cloned last year's CRio targeting side and added to this year.
+* | abcf018 Renamed whole project
+* | d2e55da Renamed whole project
+|/  
+* 8e61897 Made necessary changes to RobotTemplate to support MechanumDrive.
+* d8b8e22 Class(enum) for the motor indexes, used by MechanumDrive and SpeedController
+* 878cb9f Created a custom MechanumDrive class for driving the robot. We won't be using RobotDrive
+* 0993335 Added new class called MotorPorts to hold the ports of the motors. It is a class since enums are not supported.
+* 353b4a2 Cleaned up the code for the Encoders.
+* 6a0dbb9 Created javadoc for Acquirer class
+* 4347e3c Created javadoc for RobotTemplate and Shooter classes
+* e435d1b Added stuff to contributor's section of the code
+* 9e2e537 Changed Joystick Controls, added debug stuff, made some math calculations, and enhanced readability slightly
+* f260ca4 Encoder Test that gives analog outputs for each of the encoders.
+* 850271c Reverted the changes of the previous commit
+* 79e657a Shifted every pin up by one because pin 1 isn't working on the digital sidecar.
+*   48633d7 Merge branch 'master' of https://github.com/frc-team-3341/crio
+|\  
+| * a175d79 Changed name of ElToro class to Acquirer
+* | f8feda8 Added variables/slight adjustments.
+* | 24cd9ca Lowered strength of El Toro
+* | 607ac19 Fixed some things with the variable driving speed.
+* | cb89a37 Allowed the driving to have variable power, from 50-100%
+* | 835ee68 Made all of the Encoder code into comments.
+|/  
+* 8e0797a Changed Drive Motors to Jaguars to enable Encoder code
+*   e6af010 Merge branch 'master' of https://github.com/frc-team-3341/crio
+|\  
+| * 27d7ed8 Uncommented second shooter motor.
+| * 4c56a0a Made the max value for the catapult change depending on the throttle of the joystick. The purpose of this was to have variable power.
+| * b6e4ee3 Added tons of stuff, and now everything works
+| * 6303aef Made the potentiometer value update continiously.
+| * 89dde11 Added a potentiometer for the shooter. Min and Max Values have to be calibrated.
+| * 1794f84 Tweaked joystick control; Joystick 1 controls driving and eltoro, joystick 2 controls shooter only
+| * aa8a34a Added second joystick, one for driver and one for eltoro
+| * 9a84181 Changed Jaguars to Talons for the ElToro
+| * fb09482 Added method to reset the catapult. Change is not final. Potentiometer still needs to be implemented.
+| * e543b4d Added more joystick control for El Toro. Button mapping is not final.
+| * c435f86 Added joystick pitch control for El Toro
+| * 5b112ee Added second motor for the ElToro, and added methods to make it work
+| * e97d111 Added unnecessary comments
+| * 2bb3d95 removed unnecessary comments
+| * 93e0f97 removed unnecessary comments
+| * 885f756 added eltoro object to main template
+| * f816799 Expanded ElToro Class
+| * 42ce3ca changed the constructor for the shooter class
+| * 483c10e Adam
+| * 98e8d2f replaced if-else statements with switch statement for buttonReleased function
+| * bf51a18 added 2nd motor for catapult
+| * a5fbc48 Added El Toro Class
+| * 3e8e165 added switch statement instead of if else statements in the buttonHandler function
+* | c836195 Encoder Code Version 1
+|/  
+* 3c30655 Re-sync attempt
+* 56443d0 Removed "loader" motor from Shooter class. The Loader will have its own individual class
+* 447b309 Removed loader from shooter class
+* 9ad924a hi
+* b186b2c Basic template code for everyone to use
+* 4ef3e19 Edited the code to test some things. The code will be changed soon.
+* b02a08b Experimental Shooter and Drive code written.
+* 22e7aa9 Removed unneeded config files from old version of the project
+* 97901ca Updated cRIO code to latest version from robotics laptop
+* 41d2c16 Added sleep before readLine
+* 214547e Last Wednesdays naw
+* 9397c1b Update from Robotics Meeting 10/10/12
+* c281a19 Initial commit
