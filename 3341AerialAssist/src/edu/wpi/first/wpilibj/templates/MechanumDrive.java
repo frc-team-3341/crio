@@ -4,8 +4,8 @@
 
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Victor;
 
 /**
@@ -15,9 +15,10 @@ public class MechanumDrive {
     
     private final static int numMotors = 4;
     //holds the actual motors
-    private Victor[] m_motors = new Victor[numMotors];
+    private RateControlledMotor[] m_motors = new RateControlledMotor[numMotors];
     
-
+    Encoder frontLeftEncoder, rearLeftEncoder, frontRightEncoder, rearRightEncoder;
+    private PIDController[] m_pid = new PIDController[numMotors];
     
     //1 = non-inverted, -1 = inverted
     private int invertedMotors[] = {1, 1, 1, 1};
@@ -26,10 +27,45 @@ public class MechanumDrive {
     private double speedModifier[] = {1.0, 1.0, 1.0, 1.0};
     
     public MechanumDrive(int frontLeft, int rearLeft, int frontRight, int rearRight) {
-        m_motors[DriveMotorIndex.frontLeft] = new Victor(frontLeft);
-        m_motors[DriveMotorIndex.rearLeft] = new Victor(rearLeft);
-        m_motors[DriveMotorIndex.frontRight] = new Victor(frontRight);
-        m_motors[DriveMotorIndex.rearRight] = new Victor(rearRight);
+        m_motors[DriveMotorIndex.frontLeft] = new RateControlledMotor(new Victor(frontLeft));
+        m_motors[DriveMotorIndex.rearLeft] = new RateControlledMotor(new Victor(rearLeft));
+        m_motors[DriveMotorIndex.frontRight] = new RateControlledMotor( new Victor(frontRight));
+        m_motors[DriveMotorIndex.rearRight] = new RateControlledMotor(new Victor(rearRight));
+        
+        m_pid[DriveMotorIndex.frontLeft] =  new PIDController(1, 1, 1, frontLeftEncoder,  m_motors[DriveMotorIndex.frontLeft]);
+        m_pid[DriveMotorIndex.rearLeft] =  new PIDController(1, 1, 1, frontRightEncoder, m_motors[DriveMotorIndex.frontRight]);
+        m_pid[DriveMotorIndex.frontRight] =  new PIDController(1, 1, 1, rearLeftEncoder, m_motors[DriveMotorIndex.rearLeft]);
+        m_pid[DriveMotorIndex.rearRight] =  new PIDController(1, 1, 1, rearRightEncoder, m_motors[DriveMotorIndex.rearRight]);
+        
+        frontLeftEncoder = new Encoder(1,2,false, Encoder.EncodingType.k2X);
+        rearLeftEncoder = new Encoder(3,4,false, Encoder.EncodingType.k2X);
+        frontRightEncoder = new Encoder(5,6,false, Encoder.EncodingType.k2X);
+        rearRightEncoder = new Encoder(7,8,false, Encoder.EncodingType.k2X);
+
+        frontLeftEncoder.setDistancePerPulse(1); //distance in degrees
+        rearLeftEncoder.setDistancePerPulse(1);
+        frontRightEncoder.setDistancePerPulse(1);
+        rearRightEncoder.setDistancePerPulse(1);
+        
+        frontLeftEncoder.setSamplesToAverage(100);
+        rearLeftEncoder.setSamplesToAverage(100);
+        frontRightEncoder.setSamplesToAverage(100);
+        rearRightEncoder.setSamplesToAverage(100);
+        
+        frontLeftEncoder.start();
+        frontLeftEncoder.reset();
+        frontRightEncoder.start();
+        frontRightEncoder.reset();
+        
+        rearLeftEncoder.start();
+        rearLeftEncoder.reset();
+        rearRightEncoder.start();
+        rearRightEncoder.reset();
+        
+        for(int a = 0; a < m_pid.length; a++){
+            m_pid[a].enable();
+        }
+
     }
     
     public void setInvertedMotor(int motor, boolean isInverted) {
@@ -97,11 +133,10 @@ public class MechanumDrive {
         wheelSpeeds[DriveMotorIndex.rearRight] = xIn + yIn - rotation;
 
         normalize(wheelSpeeds);
-
-        byte syncGroup = (byte)0x80;
         
         for(int i = 0; i < this.numMotors; i++) {
-            m_motors[i].set(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i], syncGroup);
+            m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+            m_motors[i].pidWrite(m_pid[i].get());
         }
     }
 }
