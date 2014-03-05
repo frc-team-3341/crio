@@ -136,6 +136,8 @@ public class MechanumDrive {
         
         for(int i = 0; i < this.numMotors; i++) {
             m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+            System.out.println(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+            System.out.println(m_pid[i].get());
             m_motors[i].pidWrite(m_pid[i].get());
         }
     }
