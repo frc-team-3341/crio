@@ -32,18 +32,13 @@ import org.wvrobotics.control.JoystickListener;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-<<<<<<< HEAD:3341AerialAssist/src/edu/wpi/first/wpilibj/templates/Main.java
 public class Main extends IterativeRobot implements JoystickListener, ButtonListener {
-=======
-public class RobotTemplate extends IterativeRobot implements JoystickListener, ButtonListener {
-
->>>>>>> 11b3f6205345e2c491f8fe6ee8e65d969a594d84:RobotTemplate/src/edu/wpi/first/wpilibj/templates/RobotTemplate.java
     private Controller drive_controller;
     private Controller acquirer_controller;
     private MechanumDrive drive;
     private Shooter shooter;
     private Acquirer acquirer;
-    private Targeting targeting;
+    //private Targeting targeting;
     private boolean shotInAutonomous;
     //moved motor ports to a single class
     // shooter uses these
@@ -72,7 +67,7 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
         shooter = new Shooter(MotorPorts.shooter_1, MotorPorts.shooter_2);
         prevTime = 0.0;
         acquirer = new Acquirer(MotorPorts.van_door, MotorPorts.acquirer_left, MotorPorts.acquirer_right);
-        targeting = new Targeting();
+      //  targeting = new Targeting();
         shotInAutonomous = false;
         //Encoder Initialization
         //control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
@@ -83,7 +78,9 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
      * The autonomous code goes here. Called every 20 milliseconds(untested) during autonomous mode, which lasts 10 seconds
      */
     public void autonomousPeriodic() {
-        if (!shotInAutonomous) {
+       
+    }
+    /*    if (!shotInAutonomous) {
             return;
         }
         //control.encoderSetDistancePerPulse(5); //Parameter needs to be set by autonomous coder
@@ -135,9 +132,8 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
             }
             shotInAutonomous = true;
         } else {
-        }
-    }
-
+        
+         */
     /**
      * The main code that is called during user control. Called every 20 milliseconds(tested) During user control mode, which lasts about 2 minutes.
      */
@@ -150,15 +146,12 @@ public class RobotTemplate extends IterativeRobot implements JoystickListener, B
 
         // we want angular velocity.
         // it's most accurate to say (delta pot / delta time): we don't NEED to use degrees.
-<<<<<<< HEAD:3341AerialAssist/src/edu/wpi/first/wpilibj/templates/Main.java
         //System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
           //      + " timeDelta: " + (now - prevTime) );
         
-=======
-        System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
-                + " timeDelta: " + (now - prevTime));
+       // System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
+        //        + " timeDelta: " + (now - prevTime));
 
->>>>>>> 11b3f6205345e2c491f8fe6ee8e65d969a594d84:RobotTemplate/src/edu/wpi/first/wpilibj/templates/RobotTemplate.java
         prevTime = now;
         //functional stuff
         shooter.adjustMax(acquirer_controller);
