@@ -16,6 +16,7 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import org.wvrobotics.control.ButtonEvent;
@@ -74,6 +75,9 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
       //  targeting = new Targeting();
         System.out.println("test6");
         shotInAutonomous = false;
+        
+        
+        
         //Encoder Initialization
         //control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
         //control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
@@ -145,6 +149,8 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     public void teleopPeriodic() {
         //debug stuff
         //Time.timeval now = Time.timeval();
+        //AnalogChannel a = new AnalogChannel(1);
+        
         Timer t = new Timer();
         double now;
         now = Timer.getUsClock();
@@ -154,14 +160,15 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         //System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
           //      + " timeDelta: " + (now - prevTime) );
         
-       // System.out.println("potVal: " + shooter.getPotVal() + " state: " + shooter.getState()
+        //System.out.println("potVal: " + shooter.getPotVal());// + " state: " + shooter.getState()
         //        + " timeDelta: " + (now - prevTime));
-        System.out.println("Teleop");
+        //System.out.println("Teleop");
+        System.out.println(shooter.prepareHeight);
         prevTime = now;
         //functional stuff
-        shooter.adjustMax(acquirer_controller);
+        //shooter.adjustMax(acquirer_controller);
         shooter.tick();
-        System.out.println(drive_controller.getX() + "; " + drive_controller.getY() + "; " + drive_controller.getZ());
+        //System.out.println(drive_controller.getX() + "; " + drive_controller.getY() + "; " + drive_controller.getZ());
         if(drive_controller.getY() < 0.1 && drive_controller.getY() > -0.1)
             drive.drive(drive_controller.getX() * speedModifier, 0, drive_controller.getZ(), 0);
         else 
@@ -169,6 +176,9 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         //control.encoderSetDistancePerPulse(5);
         //control.setEncoderSpeed(10,10,10,10);
         //control.Encoderoutput();
+        //while(true){
+          //  System.out.println("voltage: " + (a.getVoltage()*102.040816327));
+        //}
     }
 
     /**
@@ -226,6 +236,21 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
                     break;
                 case 8:
                     speedModifier *= -1;
+                    break;
+                case 9:
+                    shooter.speed = 1.0;
+                    break;
+                case 10:
+                    shooter.speed = 0.2;
+                    break;
+                case 11:
+                    shooter.prepareHeight -= 1;
+                    break;
+                case 12:
+                    shooter.prepareHeight += 1;
+                    break;
+                case 13:
+                   //buttons 13-16 are unusable
                     break;
             }
 

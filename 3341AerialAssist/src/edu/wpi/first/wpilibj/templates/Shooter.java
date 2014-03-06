@@ -14,10 +14,11 @@ import org.wvrobotics.control.Controller;
  */
 public class Shooter {
 
-    private static final int shooterAbsoluteMaxPosition = 200;
-    private static int shooterMaxPosition = 200;//Will be modified later
-    private static final int shooterMinPosition = 50;//Will be modified later
-
+    private static final int shooterMaxPosition = 110;//Will be modified later
+    private static final int shooterMinPosition = 6;//Will be modified later
+    
+    //height where the motor switches from slow to fast speed
+    public int prepareHeight = 10;
     //potentiometer
     private AnalogPotentiometer pot;
 
@@ -26,7 +27,8 @@ public class Shooter {
     private int state; // 1 forward, 0 stopped, -1 reverse
     private long us_startTime;  // microseconds: millionth of a sec.
 
-    private double potVal;
+    private double potVal = 100;
+    public double speed = 1.0;
     /**
      * 
      * @param _motor_1 PWM Port where motor 1 is connected
@@ -48,12 +50,17 @@ public class Shooter {
         
         if (potVal < shooterMaxPosition) {
             state = 1;
-            
-            double power = 1.0;
-            
-            
-            motor_1.set(1.0);
-            motor_2.set(1.0);
+            if(speed == 1.0) {
+                if(potVal < prepareHeight) {
+                    motor_1.set(0.3);
+                    motor_2.set(0.3);
+                }
+                else {
+                    motor_1.set(1.0);
+                    motor_2.set(1.0);
+                }
+                
+            }
         } else {
             this.stop();
         }
@@ -67,8 +74,8 @@ public class Shooter {
     public void reset() {
         if (potVal > shooterMinPosition) {
             state = -1;
-            motor_1.set(-0.2);
-            motor_2.set(-0.2);
+            motor_1.set(-0.1);
+            motor_2.set(-0.1);
         } else {
             this.stop();
         }
@@ -108,40 +115,38 @@ public class Shooter {
      * Adjusts the max amount that the catapult can be pulled back by a set amount.
      * @param amount The amount by which to set the max position.
      */
-    public void setMax(int amount) {
-        shooterMaxPosition = amount;
-    }
     
-    /**
-     * Adjusts the max amount that the catapult can be pulled back based on the throttle(slider) of a joystick.
-     * @param c The controller to extract the throttle amount from.
-     */
-    public void adjustMax(Controller c) {
-        double rawVal = c.getThrottle();
-        int processedVal = (int) ((rawVal + 1) * 25); //
-        shooterMaxPosition = shooterAbsoluteMaxPosition - processedVal;
-    }
-
-    /**
-     * Updates the value of the potentiometer and stops the motors if necessary.
-     */
     public void tick() {
         this.potVal = pot.get();
         
-        System.out.println( "pot/state/start/now: " + potVal
+        /*System.out.println( "pot/state/start/now: " + potVal
                             + " " + state
                             + " " + us_startTime
                             + " " + Timer.getUsClock() );
-        
+        */
         if(state == 1){
             if(potVal >= shooterMaxPosition){
                 stop();
                 state = 0;
             }
+            else {
+                if(speed == 1.0) {
+                    if(potVal < prepareHeight) {
+                        motor_1.set(0.3);
+                        motor_2.set(0.3);
+                    }
+                    else {
+                        motor_1.set(1.0);
+                        motor_2.set(1.0);
+                    }
+                
+                }
+            }
             if ( us_startTime + (long)500000 < Timer.getUsClock() ) {
                 stop();
                 state = 0;
             }
+            
         }
         else if(state == -1){
             if(potVal <= shooterMinPosition){

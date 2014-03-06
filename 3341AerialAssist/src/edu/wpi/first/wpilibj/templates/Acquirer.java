@@ -28,14 +28,14 @@ public class Acquirer {
      * Moves the acquirer towards the robot.
      */
     public void pitch_up () {
-        vandoor.set(0.5);  
+        vandoor.set(0.2);  
     }
     
     /**
      * Moves the acquirer away from the robot.
      */
     public void pitch_down () {
-        vandoor.set(-0.5);
+        vandoor.set(-0.2);
     }
     
     /**
@@ -50,14 +50,14 @@ public class Acquirer {
      */
     public void collect() {
         acquirer_left.set(0.5);
-        acquirer_right.set(-0.5);
+        acquirer_right.set(0.5);
     }
     
     /**
      * Moves the acquirer motors in opposite directions to unload the ball.
      */
     public void dump() {
-        acquirer_left.set(-0.5);
+        acquirer_left.set(0.5);
         acquirer_right.set(0.5);
     }
     

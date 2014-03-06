@@ -27,33 +27,34 @@ public class MechanumDrive {
     private double speedModifier[] = {1.0, 1.0, 1.0, 1.0};
     
     public MechanumDrive(int frontLeft, int rearLeft, int frontRight, int rearRight) {
-        System.out.println("mech1");
+        //System.out.println("mech1");
         m_motors[DriveMotorIndex.frontLeft] = new RateControlledMotor(new Victor(frontLeft));
         m_motors[DriveMotorIndex.rearLeft] = new RateControlledMotor(new Victor(rearLeft));
         m_motors[DriveMotorIndex.frontRight] = new RateControlledMotor( new Victor(frontRight));
         m_motors[DriveMotorIndex.rearRight] = new RateControlledMotor(new Victor(rearRight));
-        System.out.println("mech2");
-        System.out.println("mech3");
+        //System.out.println("mech2");
+        //System.out.println("mech3");
         frontLeftEncoder = new Encoder(1,2,false, Encoder.EncodingType.k2X);
         rearLeftEncoder = new Encoder(3,4,false, Encoder.EncodingType.k2X);
         frontRightEncoder = new Encoder(5,6,false, Encoder.EncodingType.k2X);
         rearRightEncoder = new Encoder(7,8,false, Encoder.EncodingType.k2X);
-        System.out.println("mech4");
+        //System.out.println("mech4");
         frontLeftEncoder.setDistancePerPulse(1); //distance in degrees
         rearLeftEncoder.setDistancePerPulse(1);
         frontRightEncoder.setDistancePerPulse(1);
         rearRightEncoder.setDistancePerPulse(1);
-        System.out.println("mech5");
+        //System.out.println("mech5");
         frontLeftEncoder.setSamplesToAverage(100);
         rearLeftEncoder.setSamplesToAverage(100);
         frontRightEncoder.setSamplesToAverage(100);
         rearRightEncoder.setSamplesToAverage(100);
-        System.out.println("mech6");
+        //System.out.println("mech6");
         m_pid[DriveMotorIndex.frontLeft] =  new PIDController(.1, .001, 0, frontLeftEncoder,  m_motors[DriveMotorIndex.frontLeft]);
         m_pid[DriveMotorIndex.rearLeft] =  new PIDController(.1, .001, 0, frontRightEncoder, m_motors[DriveMotorIndex.frontRight]);
         m_pid[DriveMotorIndex.frontRight] =  new PIDController(.1, .001, 0, rearLeftEncoder, m_motors[DriveMotorIndex.rearLeft]);
         m_pid[DriveMotorIndex.rearRight] =  new PIDController(.1, .001, 0, rearRightEncoder, m_motors[DriveMotorIndex.rearRight]);
 
+          
         
         frontLeftEncoder.start();
         frontLeftEncoder.reset();
@@ -64,7 +65,7 @@ public class MechanumDrive {
         rearLeftEncoder.reset();
         rearRightEncoder.start();
         rearRightEncoder.reset();
-        System.out.println("mech7");
+        //System.out.println("mech7");
         m_pid[DriveMotorIndex.frontLeft].enable();
         m_pid[DriveMotorIndex.rearLeft].enable();
         m_pid[DriveMotorIndex.frontRight].enable();
@@ -121,7 +122,7 @@ public class MechanumDrive {
     }
 
     public void drive(double x, double y, double rotation, double gyroAngle) {
-        System.out.println("driving.");
+        //System.out.println("driving.");
         double xIn = x;
         double yIn = y;
         // Negate y for the joystick.
@@ -140,14 +141,20 @@ public class MechanumDrive {
         normalize(wheelSpeeds);
         
         for(int i = 0; i < this.numMotors; i++) {
-           // m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+           m_pid[i].setSetpoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
            // m_motors[i].
-            System.out.println("intial: " + wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
-            System.out.println("adjusted: " + m_pid[i].getF());
-            System.out.println("another print" + m_pid[i].get());
-            System.out.println(m_pid[i].isEnable());
-            m_motors[i]._Motor.set(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
-           // m_motors[i].pidWrite(m_pid[i].getF());
+            //System.out.println("intial: " + wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]);
+            //System.out.println("adjusted: " + m_pid[i].getF());
+            //System.out.println("another print" + m_pid[i].get());
+            //System.out.println(m_pid[i].isEnable());
+            //m_motors[i]._Motor.set(1);
+            //m_motors[i].pidWrite(m_pid[i].getF());
+            //System.out.println(frontLeftEncoder.getRate());
+            //System.out.println(rearLeftEncoder.getRate());
+            //System.out.println(frontRightEncoder.getRate());
+            //System.out.println(rearRightEncoder.getRate());
+            
+            
         }
     }
 }
