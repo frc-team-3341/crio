@@ -53,10 +53,10 @@ public class MecanumDrive {
         m_encoders[DriveMotorData.frontRightIndex].setSamplesToAverage(100);
         m_encoders[DriveMotorData.rearRightIndex].setSamplesToAverage(100);
         //System.out.println("mech6");
-        m_pid[DriveMotorData.frontLeftIndex] = new PIDController(.1, .001, 0, 0); // not yet tuned
-        m_pid[DriveMotorData.rearLeftIndex] = new PIDController(.1, .001, 0, 0); // not yet tuned
-        m_pid[DriveMotorData.frontRightIndex] = new PIDController(.1, .001, 0, 0); // not yet tuned
-        m_pid[DriveMotorData.rearRightIndex] = new PIDController(.1, .001, 0, 0); // not yet tuned
+        m_pid[DriveMotorData.frontLeftIndex] =  new PIDController(DriveMotorData.Kp, DriveMotorData.Ki, DriveMotorData.Kd, 0.0);
+        m_pid[DriveMotorData.rearLeftIndex] =  new PIDController(DriveMotorData.Kp, DriveMotorData.Ki, DriveMotorData.Kd, 0.0);
+        m_pid[DriveMotorData.frontRightIndex] = new PIDController(DriveMotorData.Kp, DriveMotorData.Ki, DriveMotorData.Kd, 0.0);
+        m_pid[DriveMotorData.rearRightIndex] = new PIDController(DriveMotorData.Kp, DriveMotorData.Ki, DriveMotorData.Kd, 0.0);
 
 	for (int i = 0; i < numMotors; i++)
 	{

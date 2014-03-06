@@ -17,4 +17,7 @@ public class DriveMotorData {
     public static final int frontRightIndex = 2;
     public static final int rearRightIndex = 3;
     public static final double maxEncoderRate = 2300.0; // not tuned yet
+    public static final double Kp = 1; // not tuned yet
+    public static final double Ki = 0.01; // not tuned yet
+    public static final double Kd = 0.0; // not tuned yet
 }
