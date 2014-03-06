@@ -43,6 +43,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     private UltrasonicSensor ultrasonic;
     //private Targeting targeting;
     private boolean shotInAutonomous;
+    private double autonomousPWM;
     //moved motor ports to a single class
     // shooter uses these
     private double prevTime;
@@ -55,42 +56,46 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     public void robotInit() {
         getWatchdog().setEnabled(false);
         //controllers
-        System.out.println("test1");
         drive_controller = ControllerManager.getInstance().getController(1, 16);
         drive_controller.addButtonListener(this);
         drive_controller.addJoystickListener(this);
-        System.out.println("test2");
         acquirer_controller = ControllerManager.getInstance().getController(2, 16);
         acquirer_controller.addButtonListener(this);
         acquirer_controller.addJoystickListener(this);
         //motor stuff]
-        System.out.println("test3");
         drive = new MecanumDrive(DevicePorts.frontLeftPWM, DevicePorts.rearLeftPWM,
                 DevicePorts.frontRightPWM, DevicePorts.rearRightPWM);
         drive.setInvertedMotor(DriveMotorData.frontRightIndex, true);
         drive.setInvertedMotor(DriveMotorData.rearRightIndex, true);
         //Other functionality
-        System.out.println("test4");
         shooter = new Shooter(DevicePorts.shooter1PWM, DevicePorts.shooter2PWM);
         prevTime = 0.0;
-        System.out.println("test5");
         acquirer = new Acquirer(DevicePorts.vanDoorPWM, DevicePorts.acquirerLeftPWM,
                 DevicePorts.acquirerRightPWM);
       //  targeting = new Targeting();
-        System.out.println("test6");
         shotInAutonomous = false;
+        autonomousPWM = 0.0;
         ultrasonic = new UltrasonicSensor(DevicePorts.ultrasonicAnalog);
         dsInterface = new DriverStationInterface();
-        //Encoder Initialization
-        //control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
-        //control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
     }
 
+    public void autonomousInit() {
+        while (ultrasonic.getDistance() > 9.0 * 12.0) // drive up to 9 feet from the goal
+            drive.drive(0.0, 0.5, 0.0, 0.0);
+        drive.drive(0.0, 0.0, 0.0, 0.0);
+        shooter.shoot();
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        shooter.reset();
+    }
+    
     /**
      * The autonomous code goes here. Called every 20 milliseconds(untested) during autonomous mode, which lasts 10 seconds
      */
     public void autonomousPeriodic() {
-       
     }
     /*    if (!shotInAutonomous) {
             return;
