@@ -5,8 +5,8 @@
 package org.wvrobotics;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
 
 /**
  *
@@ -32,16 +32,16 @@ public class MecanumDrive {
     
     public MecanumDrive(int frontLeft, int rearLeft, int frontRight, int rearRight) {
         //System.out.println("mech1");
-        m_motors[DriveMotorData.frontLeftIndex] = new Victor(frontLeft);
-        m_motors[DriveMotorData.rearLeftIndex] = new Victor(rearLeft);
-        m_motors[DriveMotorData.frontRightIndex] = new Victor(frontRight);
-        m_motors[DriveMotorData.rearRightIndex] = new Victor(rearRight);
+        m_motors[DriveMotorData.frontLeftIndex] = new Jaguar(frontLeft);
+        m_motors[DriveMotorData.rearLeftIndex] = new Jaguar(rearLeft);
+        m_motors[DriveMotorData.frontRightIndex] = new Jaguar(frontRight);
+        m_motors[DriveMotorData.rearRightIndex] = new Jaguar(rearRight);
         //System.out.println("mech2");
         //System.out.println("mech3");
-	m_encoders[DriveMotorData.frontLeftIndex] = new Encoder(1,2,false, Encoder.EncodingType.k2X);
-	m_encoders[DriveMotorData.rearLeftIndex] = new Encoder(3,4,false, Encoder.EncodingType.k2X);
-        m_encoders[DriveMotorData.frontRightIndex] = new Encoder(5,6,false, Encoder.EncodingType.k2X);
-        m_encoders[DriveMotorData.rearRightIndex] = new Encoder(7,8,false, Encoder.EncodingType.k2X);
+	m_encoders[DriveMotorData.frontLeftIndex] = new Encoder(DevicePorts.frontLeftEncoderDigital1, DevicePorts.frontLeftEncoderDigital2, false, Encoder.EncodingType.k2X);
+	m_encoders[DriveMotorData.rearLeftIndex] = new Encoder(DevicePorts.rearLeftEncoderDigital1, DevicePorts.rearLeftEncoderDigital2, false, Encoder.EncodingType.k2X);
+        m_encoders[DriveMotorData.frontRightIndex] = new Encoder(DevicePorts.frontRightEncoderDigital1, DevicePorts.frontRightEncoderDigital2, false, Encoder.EncodingType.k2X);
+        m_encoders[DriveMotorData.rearRightIndex] = new Encoder(DevicePorts.rearRightEncoderDigital1, DevicePorts.rearRightEncoderDigital2, false, Encoder.EncodingType.k2X);
         //System.out.println("mech4");
         m_encoders[DriveMotorData.frontLeftIndex].setDistancePerPulse(1); //distance in degrees
         m_encoders[DriveMotorData.rearLeftIndex].setDistancePerPulse(1);
@@ -91,8 +91,8 @@ public class MecanumDrive {
     }
     
     protected static double[] rotateVector(double x, double y, double angle) {
-        double cosA = Math.cos(angle * (3.14159 / 180.0));
-        double sinA = Math.sin(angle * (3.14159 / 180.0));
+        double cosA = Math.cos(angle * (Math.PI / 180.0));
+        double sinA = Math.sin(angle * (Math.PI / 180.0));
         double out[] = new double[2];
         out[0] = x * cosA - y * sinA;
         out[1] = x * sinA + y * cosA;
@@ -132,9 +132,14 @@ public class MecanumDrive {
 
         normalize(wheelSpeeds);
         
+        for (int i = 0; i < numMotors; i++)
+            System.out.print(m_encoders[i].getRate() + " ");
+        System.out.println();
+        
         for(int i = 0; i < numMotors; i++) {
-	    m_pid[i].setSetPoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i] * DriveMotorData.minOfMaxEncoderRates);
-	    m_motors[i].set(m_pid[i].tick(m_encoders[i].getRate()) / DriveMotorData.maxEncoderRates[i]);
+	    /* UNCOMMENT TO ENABLE PID CONTROLLED DRIVING
+            m_pid[i].setSetPoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i] * DriveMotorData.minOfMaxEncoderRates);
+	    m_motors[i].set(m_pid[i].tick(m_encoders[i].getRate()) / DriveMotorData.maxEncoderRates[i]);*/
         }
     }
 }

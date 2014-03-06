@@ -24,7 +24,7 @@ public class DriveMotorData {
         2300.0 // not tuned yet
     };
     public static final double minOfMaxEncoderRates = 2300.0; // not tuned yet
-    public static final double Kp = 1; // not tuned yet
-    public static final double Ki = 0.01; // not tuned yet
+    public static final double Kp = 10; // not tuned yet
+    public static final double Ki = 0.1; // not tuned yet
     public static final double Kd = 0.0; // not tuned yet
 }

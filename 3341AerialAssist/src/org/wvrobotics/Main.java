@@ -39,6 +39,8 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     private MecanumDrive drive;
     private Shooter shooter;
     private Acquirer acquirer;
+    private DriverStationInterface dsInterface;
+    private UltrasonicSensor ultrasonic;
     //private Targeting targeting;
     private boolean shotInAutonomous;
     //moved motor ports to a single class
@@ -51,8 +53,8 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      * All the variables and objects are initialized in this method. It is called once.
      */
     public void robotInit() {
-
-        //controllers\
+        getWatchdog().setEnabled(false);
+        //controllers
         System.out.println("test1");
         drive_controller = ControllerManager.getInstance().getController(1, 16);
         drive_controller.addButtonListener(this);
@@ -63,21 +65,22 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         acquirer_controller.addJoystickListener(this);
         //motor stuff]
         System.out.println("test3");
-        drive = new MecanumDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
+        drive = new MecanumDrive(DevicePorts.frontLeftPWM, DevicePorts.rearLeftPWM,
+                DevicePorts.frontRightPWM, DevicePorts.rearRightPWM);
         drive.setInvertedMotor(DriveMotorData.frontRightIndex, true);
         drive.setInvertedMotor(DriveMotorData.rearRightIndex, true);
         //Other functionality
         System.out.println("test4");
-        shooter = new Shooter(MotorPorts.shooter_1, MotorPorts.shooter_2);
+        shooter = new Shooter(DevicePorts.shooter1PWM, DevicePorts.shooter2PWM);
         prevTime = 0.0;
         System.out.println("test5");
-        acquirer = new Acquirer(MotorPorts.van_door, MotorPorts.acquirer_left, MotorPorts.acquirer_right);
+        acquirer = new Acquirer(DevicePorts.vanDoorPWM, DevicePorts.acquirerLeftPWM,
+                DevicePorts.acquirerRightPWM);
       //  targeting = new Targeting();
         System.out.println("test6");
         shotInAutonomous = false;
-        
-        
-        
+        ultrasonic = new UltrasonicSensor(DevicePorts.ultrasonicAnalog);
+        dsInterface = new DriverStationInterface();
         //Encoder Initialization
         //control = new SpeedController(14, 0, 0, 0, 0, 0, 0, 0);
         //control.pidInitializer(1.0, 0, 0, top_left, 1.0, 0, 0, bottom_left, 1.0, 0, 0, top_right, 1.0, 0, 0, bottom_right);
@@ -147,9 +150,6 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      * The main code that is called during user control. Called every 20 milliseconds(tested) During user control mode, which lasts about 2 minutes.
      */
     public void teleopPeriodic() {
-        //debug stuff
-        //Time.timeval now = Time.timeval();
-        //AnalogChannel a = new AnalogChannel(1);
         
         Timer t = new Timer();
         double now;
@@ -168,17 +168,12 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         //functional stuff
         //shooter.adjustMax(acquirer_controller);
         shooter.tick();
-        //System.out.println(drive_controller.getX() + "; " + drive_controller.getY() + "; " + drive_controller.getZ());
         if(drive_controller.getY() < 0.1 && drive_controller.getY() > -0.1)
             drive.drive(drive_controller.getX() * speedModifier, 0, drive_controller.getZ(), 0);
         else 
             drive.drive(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, drive_controller.getZ() * speedModifier, 0);
-        //control.encoderSetDistancePerPulse(5);
-        //control.setEncoderSpeed(10,10,10,10);
-        //control.Encoderoutput();
-        //while(true){
-          //  System.out.println("voltage: " + (a.getVoltage()*102.040816327));
-        //}
+        dsInterface.setLine(2, ultrasonic.toString());
+        
     }
 
     /**
@@ -192,8 +187,9 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     }
 
     public void throttleMoved(JoystickEvent e) {
-        if (e.getSource().getPort() == 1) { //driver controller
-        } else { //shooter controller
+        if (e.getSource().equals(acquirer_controller)) {
+        }
+        else if (e.getSource().equals(drive_controller)) {
         }
     }
 
@@ -202,7 +198,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      * @param e A button event that caries information about which button(s) are pressed. Different methods are called based on what button was pressed.
      */
     public void buttonPressed(ButtonEvent e) {
-        if (e.getSource().getPort() == 1) {//Acquirer joystick
+        if (e.getSource().equals(acquirer_controller)) {
             switch (e.getButton()) {
                 case 1:
                     acquirer.collect();
@@ -217,7 +213,8 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
                     acquirer.pitch_up();
                     break;
             }
-        } else { //source == driver_controller
+        }
+        else if (e.getSource().equals(drive_controller)) {
             switch (e.getButton()) {
                 case 1:
                     shooter.shoot();
@@ -262,7 +259,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      * @param e A button event that caries information about which button(s) are released. Different methods are called based on what button was released.
      */
     public void buttonReleased(ButtonEvent e) {
-        if (e.getSource().getPort() == 1) { //source == accquirer_controller
+        if (e.getSource().equals(acquirer_controller)) {
             switch (e.getButton()) {
                 case 1:
                     acquirer.acquirer_stop();
