@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.AnalogChannel;
  */
 public class UltrasonicSensor {
     private AnalogChannel ultrasonic;
-    private static final double voltageToInches = 102.040816327;
+    private static final double voltageToInches = 1000.0 / 9.8;
     
     public UltrasonicSensor(int ultrasonicPort)
     {

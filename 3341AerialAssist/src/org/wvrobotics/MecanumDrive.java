@@ -137,7 +137,8 @@ public class MecanumDrive {
         System.out.println();
         
         for(int i = 0; i < numMotors; i++) {
-	    /* UNCOMMENT TO ENABLE PID CONTROLLED DRIVING
+            m_motors[i].set(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i]); // non-PID controlled driving
+	    /* UNCOMMENT TO ENABLE PID CONTROLLED DRIVING AND COMMENT THE LINE ABOVE
             m_pid[i].setSetPoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i] * DriveMotorData.minOfMaxEncoderRates);
 	    m_motors[i].set(m_pid[i].tick(m_encoders[i].getRate()) / DriveMotorData.maxEncoderRates[i]);*/
         }

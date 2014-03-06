@@ -37,5 +37,6 @@ public class DriverStationInterface {
     public void setLine(int line, String lineData)
     {
         lcdData[line] = lineData;
+        updateLCD();
     }
 }

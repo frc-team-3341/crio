@@ -80,8 +80,11 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     }
 
     public void autonomousInit() {
-        while (ultrasonic.getDistance() > 9.0 * 12.0) // drive up to 9 feet from the goal
+        while (ultrasonic.getDistance() > 9.0 * 12.0) { // drive up to 9 feet from the goal
             drive.drive(0.0, 0.5, 0.0, 0.0);
+            dsInterface.setLine(2, ultrasonic.toString());
+        }
+        dsInterface.setLine(2, "Reached 9 feet");
         drive.drive(0.0, 0.0, 0.0, 0.0);
         shooter.shoot();
         try {
@@ -168,7 +171,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         //System.out.println("potVal: " + shooter.getPotVal());// + " state: " + shooter.getState()
         //        + " timeDelta: " + (now - prevTime));
         //System.out.println("Teleop");
-        System.out.println(shooter.prepareHeight);
+        //System.out.println(shooter.prepareHeight);
         prevTime = now;
         //functional stuff
         //shooter.adjustMax(acquirer_controller);
@@ -178,7 +181,6 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         else 
             drive.drive(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, drive_controller.getZ() * speedModifier, 0);
         dsInterface.setLine(2, ultrasonic.toString());
-        
     }
 
     /**

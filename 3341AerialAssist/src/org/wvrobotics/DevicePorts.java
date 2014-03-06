@@ -1,7 +1,7 @@
 package org.wvrobotics;
 
 /**
- * @author George "Agent 10" Troulis <georgetroulis@gmail.com
+ * @author George "Agent 10" Troulis
  * @author Tushar Pankaj
  */
 public class DevicePorts {
