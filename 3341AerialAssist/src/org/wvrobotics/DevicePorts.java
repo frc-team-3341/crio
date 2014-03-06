@@ -31,6 +31,7 @@ public class DevicePorts {
     public static final int rearRightEncoderDigital2 = 8;
     
     // Analog sensor ports
-    public static final int ultrasonicAnalog = 1;
     public static final int potentiometerAnalog = 4;
+    public static final int ultrasonicAnalog = 5;
+
 }
