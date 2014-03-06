@@ -9,10 +9,12 @@ package edu.wpi.first.wpilibj.templates;
 /**
  *  class(enum) for motor indexes
  * @author George "Agent 10" Troulis <georgetroulis@gmail.com>
+ * @author Tushar Pankaj
  */
-public class DriveMotorIndex {
-    public static final int frontLeft = 0;
-    public static final int rearLeft = 1;
-    public static final int frontRight = 2;
-    public static final int rearRight = 3;
+public class DriveMotorData {
+    public static final int frontLeftIndex = 0;
+    public static final int rearLeftIndex = 1;
+    public static final int frontRightIndex = 2;
+    public static final int rearRightIndex = 3;
+    public static final double maxEncoderRate = 2300.0; // not tuned yet
 }

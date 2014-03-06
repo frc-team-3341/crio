@@ -36,7 +36,7 @@ import org.wvrobotics.control.JoystickListener;
 public class Main extends IterativeRobot implements JoystickListener, ButtonListener {
     private Controller drive_controller;
     private Controller acquirer_controller;
-    private MechanumDrive drive;
+    private MecanumDrive drive;
     private Shooter shooter;
     private Acquirer acquirer;
     //private Targeting targeting;
@@ -63,9 +63,9 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         acquirer_controller.addJoystickListener(this);
         //motor stuff]
         System.out.println("test3");
-        drive = new MechanumDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
-        drive.setInvertedMotor(DriveMotorIndex.frontRight, true);
-        drive.setInvertedMotor(DriveMotorIndex.rearRight, true);
+        drive = new MecanumDrive(MotorPorts.top_left, MotorPorts.bottom_left, MotorPorts.top_right, MotorPorts.bottom_right);
+        drive.setInvertedMotor(DriveMotorData.frontRightIndex, true);
+        drive.setInvertedMotor(DriveMotorData.rearRightIndex, true);
         //Other functionality
         System.out.println("test4");
         shooter = new Shooter(MotorPorts.shooter_1, MotorPorts.shooter_2);

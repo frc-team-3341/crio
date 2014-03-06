@@ -1,3 +1,12 @@
+package edu.wpi.first.wpilibj.templates;
+
+import edu.wpi.first.wpilibj.Timer;
+
+/**
+ *
+ * @author Tushar Pankaj
+ *
+ */
 public class PIDController
 {
     private double Kp;
@@ -6,6 +15,7 @@ public class PIDController
     private double setPoint;
     private double previousError;
     private double integral;
+    private long lastCallTime;
 
     public PIDController(double Kp, double Ki, double Kd, double setPoint)
     {
@@ -16,14 +26,22 @@ public class PIDController
 
 	previousError = 0.0;
 	integral = 0.0;
+	lastCallTime = -1;
     }
 
-    public double tick(double measuredValue, double dt)
+    public double tick(double measuredValue)
     {
+	long thisCallTime = Timer.getUsClock();
+	double dt;
+	if (lastCallTime = -1)
+	    dt = 0.0;
+	else
+	    dt = (double)(thisCallTime - lastCallTime) * 0.000001; // convert useconds to seconds
 	double error = setPoint - measuredValue;
 	integral += error * dt;
 	double derivative = (error - previousError) / dt;
 	previousError = error;
+	lastCallTime = thisCallTime;
 
 	return Kp * error + Ki * integral + Kd * derivative;
     }
