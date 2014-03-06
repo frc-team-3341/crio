@@ -1,10 +1,8 @@
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Timer;
-import  edu.wpi.first.wpilibj.Timer;
-import org.wvrobotics.control.Controller;
 
 /**
  * 
@@ -111,11 +109,6 @@ public class Shooter {
         return potVal;
     }
     
-    /**
-     * Adjusts the max amount that the catapult can be pulled back by a set amount.
-     * @param amount The amount by which to set the max position.
-     */
-    
     public void tick() {
         this.potVal = pot.get();
         
@@ -154,6 +147,5 @@ public class Shooter {
                 state = 0;
             }
         }
-         //To change body of generated methods, choose Tools | Templates.
     }
 }

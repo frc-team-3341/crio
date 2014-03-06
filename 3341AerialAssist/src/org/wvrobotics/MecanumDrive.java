@@ -2,7 +2,7 @@
  * Custom MecanumDrive class to allow for encoder control
  */
 
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -133,8 +133,8 @@ public class MecanumDrive {
         normalize(wheelSpeeds);
         
         for(int i = 0; i < numMotors; i++) {
-	    m_pid[i].setSetPoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i] * DriveMotorData.maxEncoderRate);
-	    m_motors[i].set(m_pid[i].tick(m_encoders[i].getRate()) / DriveMotorData.maxEncoderRate);
+	    m_pid[i].setSetPoint(wheelSpeeds[i] * invertedMotors[i] * speedModifier[i] * DriveMotorData.minOfMaxEncoderRates);
+	    m_motors[i].set(m_pid[i].tick(m_encoders[i].getRate()) / DriveMotorData.maxEncoderRates[i]);
         }
     }
 }

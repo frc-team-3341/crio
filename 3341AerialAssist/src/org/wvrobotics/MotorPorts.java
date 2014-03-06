@@ -1,7 +1,7 @@
 /*
  * Since enums are not supported, this is a class to hold the ports of the robot motors
  */
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
 /**
  * @author George "Agent 10" Troulis <georgetroulis@gmail.com>

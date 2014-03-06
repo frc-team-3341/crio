@@ -12,11 +12,11 @@
  *  @author Brenda <something>
  *  @author David Mao
  *  @author Prathyush Katukojwala
+ *  @author Tushar Pankaj
  *  Code available on Github
  */
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
-import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import org.wvrobotics.control.ButtonEvent;

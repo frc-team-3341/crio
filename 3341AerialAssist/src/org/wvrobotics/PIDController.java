@@ -1,4 +1,4 @@
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
 /**
  *
@@ -47,7 +47,7 @@ public class PIDController
 
     public void setKp(double Kp)
     {
-	this.setKp = Kp;
+	this.Kp = Kp;
     }
 
     public double getKp()
@@ -57,7 +57,7 @@ public class PIDController
 
     public void setKi(double Ki)
     {
-	this.setKi = Ki;
+	this.Ki = Ki;
     }
 
     public double getKi()
@@ -67,7 +67,7 @@ public class PIDController
 
     public void setKd(double Kd)
     {
-	this.setKd = Kd;
+	this.Kd = Kd;
     }
 
     public double getKd()

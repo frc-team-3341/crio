@@ -1,4 +1,4 @@
-package edu.wpi.first.wpilibj.templates;
+package org.wvrobotics;
 
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Talon;
