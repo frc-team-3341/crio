@@ -50,7 +50,7 @@ public class Acquirer {
      */
     public void collect() {
         acquirer_left.set(0.5);
-        acquirer_right.set(0.5);
+        acquirer_right.set(-0.5);
     }
     
     /**
@@ -58,7 +58,7 @@ public class Acquirer {
      */
     public void dump() {
         acquirer_left.set(0.5);
-        acquirer_right.set(0.5);
+        acquirer_right.set(-0.5);
     }
     
     /**
