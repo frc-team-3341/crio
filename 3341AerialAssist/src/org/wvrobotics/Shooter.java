@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Shooter {
 
-    private static final int shooterMaxPosition = 110;//Will be modified later
+    public static int shooterMaxPosition = 110;//Will be modified later
     private static final int shooterMinPosition = 6;//Will be modified later
     
     //height where the motor switches from slow to fast speed

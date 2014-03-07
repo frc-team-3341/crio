@@ -79,10 +79,22 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     }
 
     public void autonomousInit() {
-        // NEED TO MOVE EL TORO OUT OF THE WAY FIRST
+        Runnable toro = new Runnable(){
+        public void run(){
+           acquirer.pitch_down();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+           acquirer.pitch_stop();
+        }
+        };
+        Thread t = new Thread(toro);
+        t.start();
         while (ultrasonic.getDistance() > 9.0 * 12.0) { // drive up to 9 feet from the goal
             drive.drive(0.0, 0.5, 0.0, 0.0);
-            dsInterface.setLine(2, ultrasonic.toString());
+            dsInterface.setLine(3, "Ultrasonic: "+ultrasonic.toString());
         }
         dsInterface.setLine(2, "Reached 9 feet");
         drive.drive(0.0, 0.0, 0.0, 0.0);
@@ -180,7 +192,10 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
             drive.drive(drive_controller.getX() * speedModifier, 0, drive_controller.getZ(), 0);
         else 
             drive.drive(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, drive_controller.getZ() * speedModifier, 0);
-        dsInterface.setLine(2, ultrasonic.toString());
+        dsInterface.setLine(1, "PotVal: "+Double.toString(shooter.getPotVal()));
+        dsInterface.setLine(2, "MaxPotVal: "+Double.toString(shooter.shooterMaxPosition));
+        dsInterface.setLine(3, "Ultrasonic: "+ultrasonic.toString());
+        
     }
 
     /**
@@ -228,6 +243,12 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
                     break;
                 case 2:
                     shooter.reset();
+                    break;
+                case 3:
+                    shooter.shooterMaxPosition += 1;
+                    break;
+                case 4:
+                    shooter.shooterMaxPosition -= 1;
                     break;
                 case 5:
                     speedModifier = 0.5;
@@ -286,4 +307,6 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
 
     public void buttonTyped(ButtonEvent e) {
     }
+    
+     
 }
