@@ -57,8 +57,8 @@ public class Acquirer {
      * Moves the acquirer motors in opposite directions to unload the ball.
      */
     public void dump() {
-        acquirer_left.set(0.5);
-        acquirer_right.set(-0.5);
+        acquirer_left.set(-0.5);
+        acquirer_right.set(0.5);
     }
     
     /**

@@ -44,7 +44,6 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     //private Targeting targeting;
     private boolean shotInAutonomous;
     private double autonomousPWM;
-    //moved motor ports to a single class
     // shooter uses these
     private double prevTime;
     //Other stuff
@@ -80,6 +79,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     }
 
     public void autonomousInit() {
+        // NEED TO MOVE EL TORO OUT OF THE WAY FIRST
         while (ultrasonic.getDistance() > 9.0 * 12.0) { // drive up to 9 feet from the goal
             drive.drive(0.0, 0.5, 0.0, 0.0);
             dsInterface.setLine(2, ultrasonic.toString());
