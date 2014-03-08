@@ -22,6 +22,6 @@ public class UltrasonicSensor {
     
     public String toString()
     {
-        return Double.toString(getDistance());
+        return Double.toString(getDistance() / 12); //to feet
     }
 }

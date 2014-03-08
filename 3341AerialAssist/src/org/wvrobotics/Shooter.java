@@ -16,7 +16,7 @@ public class Shooter {
     private static final int shooterMinPosition = 6;//Will be modified later
     
     //height where the motor switches from slow to fast speed
-    public int prepareHeight = 10;
+    public int prepareHeight = 25;
     //potentiometer
     private AnalogPotentiometer pot;
 
@@ -44,10 +44,11 @@ public class Shooter {
     /**
      * Moves both motors forward at top speed if there is room for movement.
      */
-    public void shoot() {
+    public void shoot(MecanumDrive d) {
         
         if (potVal < shooterMaxPosition) {
             state = 1;
+            d.drive(0.0, 0.02, 0.0, 0.0);
             if(speed == 1.0) {
                 if(potVal < prepareHeight) {
                     motor_1.set(0.3);

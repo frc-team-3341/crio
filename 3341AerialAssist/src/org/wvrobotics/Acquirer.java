@@ -28,7 +28,7 @@ public class Acquirer {
      * Moves the acquirer towards the robot.
      */
     public void pitch_up () {
-        vandoor.set(0.5);  
+        vandoor.set(0.4);  
     }
     
     /**

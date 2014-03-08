@@ -79,32 +79,61 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
     }
 
     public void autonomousInit() {
-        Runnable toro = new Runnable(){
-        public void run(){
-           acquirer.pitch_down();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-           acquirer.pitch_stop();
-        }
-        };
-        Thread t = new Thread(toro);
-        t.start();
-        while (ultrasonic.getDistance() > 9.0 * 12.0) { // drive up to 9 feet from the goal
-            drive.drive(0.0, 0.5, 0.0, 0.0);
-            dsInterface.setLine(3, "Ultrasonic: "+ultrasonic.toString());
-        }
-        dsInterface.setLine(2, "Reached 9 feet");
-        drive.drive(0.0, 0.0, 0.0, 0.0);
-        shooter.shoot();
         try {
-            Thread.sleep(1);
+            /*
+            Runnable toro = new Runnable(){
+            public void run(){
+            
+            }
+            };
+            Thread t = new Thread(toro);
+            t.start();*/
+            /*while (ultrasonic.getDistance() > 9.0 * 12.0) { // drive up to 9 feet from the goal
+            drive.drive(0.0, 0.8, 0.0, 0.0);
+            dsInterface.setLine(3, "Ultrasonic: " + ultrasonic.toString());
+            }
+            dsInterface.setLine(2, "Reached 9 feet");
+            drive.drive(0.0, 0.0, 0.0, 0.0);
+            dsInterface.setLine(2, "Shooting");
+            
+            shooter.shoot(drive);
+            //Thread.sleep(7000);*/
+            drive.drive(0,0.8,0,0);
+            Thread.sleep(1500);
+            drive.drive(0,0,0,0);
+            Thread.sleep(1000);
+            acquirer.pitch_down();
+            Thread.sleep(1000);
+            acquirer.pitch_stop();
+            shooter.shoot(drive);
+            Runnable runShootTick = new Runnable(){
+                public void run(){
+                    while (true)
+                    {
+                        shooter.tick();
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            };
+            Thread runShootTickThread = new Thread(runShootTick);
+            runShootTickThread.start();
+            Thread.sleep(2000);
+            shooter.reset();
+            Thread.sleep(3000);
+            /*drive.drive(0.0, 0.3, 0.0, 0.0);
+            try {
+            Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+            ex.printStackTrace();
+            }
+            drive.drive(0,0,0,0);*/
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
-        shooter.reset();
     }
     
     /**
@@ -188,13 +217,20 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         //functional stuff
         //shooter.adjustMax(acquirer_controller);
         shooter.tick();
+        if(acquirer_controller.getY() > 0.1)
+            acquirer.pitch_up();
+        else if (acquirer_controller.getY() < -0.1)
+            acquirer.pitch_down();
+        else
+            acquirer.pitch_stop();
         if(drive_controller.getY() < 0.1 && drive_controller.getY() > -0.1)
             drive.drive(drive_controller.getX() * speedModifier, 0, drive_controller.getZ(), 0);
         else 
             drive.drive(drive_controller.getX() * speedModifier, drive_controller.getY() * speedModifier, drive_controller.getZ() * speedModifier, 0);
-        dsInterface.setLine(1, "PotVal: "+Double.toString(shooter.getPotVal()));
-        dsInterface.setLine(2, "MaxPotVal: "+Double.toString(shooter.shooterMaxPosition));
-        dsInterface.setLine(3, "Ultrasonic: "+ultrasonic.toString());
+        dsInterface.setLine(1, "PotVal: " + Double.toString(shooter.getPotVal()));
+        dsInterface.setLine(2, "MaxPotVal: " + Double.toString(shooter.shooterMaxPosition));
+        dsInterface.setLine(3, "Ultrasonic: " + ultrasonic.toString() + " feet");
+        dsInterface.setLine(4, "AccHeight: " + shooter.prepareHeight);
         
     }
 
@@ -202,7 +238,11 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
      * This function is not called during competition mode, but it can be called through the driver station. It is used to initialize the potentiometer.
      */
     public void testPeriodic() {
-        //TODO: add code to calibrate potentiometer
+        shooter.tick();//bad idea? (tick in test mode might make robot move?)
+                //update the potentiometer value while in test mode
+        dsInterface.setLine(1, "PotVal: "+Double.toString(shooter.getPotVal()));
+        dsInterface.setLine(2, "MaxPotVal: "+Double.toString(shooter.shooterMaxPosition));
+        dsInterface.setLine(3, "Ultrasonic: "+ultrasonic.toString());
     }
 
     public void joystickMoved(JoystickEvent e) {
@@ -239,7 +279,7 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
         else if (e.getSource().equals(drive_controller)) {
             switch (e.getButton()) {
                 case 1:
-                    shooter.shoot();
+                    shooter.shoot(drive);
                     break;
                 case 2:
                     shooter.reset();
