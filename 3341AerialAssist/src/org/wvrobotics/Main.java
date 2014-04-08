@@ -98,8 +98,8 @@ public class Main extends IterativeRobot implements JoystickListener, ButtonList
             
             shooter.shoot(drive);
             //Thread.sleep(7000);*/
-            drive.drive(0,0.8,0,0);
-            Thread.sleep(1500);
+            drive.drive(0,0.5,0,0);
+            Thread.sleep(2000);
             drive.drive(0,0,0,0);
             Thread.sleep(1000);
             acquirer.pitch_down();
