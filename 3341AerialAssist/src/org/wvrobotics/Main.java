@@ -13,7 +13,7 @@
  *  @author David Mao
  *  @author Prathyush Katukojwala
  *  @author Tushar Pankaj
- *  Code available on Github
+ *  Code available on [Github](https://github.com/frc-team-3341/crio/tree/master/3341AerialAssist)
  */
 package org.wvrobotics;
 
